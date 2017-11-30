@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package account;
+
+option java_package = "protobuff.account";
+
+message Account {
+  required bool type = 1;
+  required string username = 2;
+  required string password = 3;
+}

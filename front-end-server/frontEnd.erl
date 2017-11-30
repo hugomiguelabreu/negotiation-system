@@ -10,7 +10,7 @@ server(Port) ->
 acceptor(LSock) ->
 	{ok, Sock} = gen_tcp:accept(LSock),
 	spawn(fun() -> acceptor(LSock) end),
-	Nome = autenticacao(Sock). % Nome = nome do utilizador
+	autenticacao(Sock). % Nome = nome do utilizador
 
 autenticacao(Sock) ->
 	Msg = "[l]login\n[r]registo\n",
@@ -31,8 +31,7 @@ autenticacao(Sock) ->
                   				{tcp, _, DataP} ->
                     				case (login_manager:login(DataU, DataP)) of
                       					ok -> 
-                        					gen_tcp:send(Sock, "--------\nlogin efetuado com sucesso\n--------\n"),
-                        					DataU;
+                        					gen_tcp:send(Sock, "--------\nlogin efetuado com sucesso\n--------\n");
 					                    invalid -> 
 					                    	gen_tcp:send(Sock, "--------\nlogin invalido\n--------\n"),
 					                    	autenticacao(Sock)

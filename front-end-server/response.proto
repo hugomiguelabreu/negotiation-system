@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+package response;
+
+option java_package = "protobuff.response";
+
+message Response {
+  required bool rep = 1;
+}
