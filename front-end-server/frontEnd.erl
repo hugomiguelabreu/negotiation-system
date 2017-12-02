@@ -23,7 +23,7 @@ autenticacao(Sock) ->
             		gen_tcp:send(Sock, MsgU),
             		receive
               			{tcp, _, DataUX} ->
-			                Aux = byte_size(DataUX) - 2, %para tirar o \n\r no fim (\r no windows???)
+			                Aux = byte_size(DataUX) - 2, %para tirar o \n\r no fim (\r it's return)
 			                DataU = binary:part(DataUX, {0,Aux}),
 			                MsgP = "password:",
 			                gen_tcp:send(Sock, MsgP),
@@ -45,7 +45,7 @@ autenticacao(Sock) ->
               				gen_tcp:send(Sock, MsgRU),
               				receive
 	                			{tcp, _, DataRUX} ->
-	                  				Aux = byte_size(DataRUX) - 2, %para tirar o \n\r no fim (\r no windows???)
+	                  				Aux = byte_size(DataRUX) - 2, %para tirar o \n\r no fim (\r it's return)
 	                  				DataRU = binary:part(DataRUX, {0,Aux}),
 	                  				MsgRP = "password:",
 	                  				gen_tcp:send(Sock, MsgRP),
