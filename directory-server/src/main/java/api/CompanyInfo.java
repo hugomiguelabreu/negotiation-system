@@ -1,30 +1,23 @@
 package api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import core.Company;
 import org.hibernate.validator.constraints.Length;
 
 public class CompanyInfo {
-    private long id;
 
-    @Length(max = 3)
-    private String content;
+    private Company company;
 
     public CompanyInfo() {
         // Jackson deserialization
     }
 
-    public CompanyInfo(long id, String content) {
-        this.id = id;
-        this.content = content;
+    public CompanyInfo(Company company) {
+        this.company = company;
     }
 
     @JsonProperty
-    public long getId() {
-        return id;
-    }
-
-    @JsonProperty
-    public String getContent() {
-        return content;
+    public Company getCompany() {
+        return this.company;
     }
 }

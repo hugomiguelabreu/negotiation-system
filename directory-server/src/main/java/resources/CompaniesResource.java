@@ -1,18 +1,15 @@
 package resources;
 
-import api.Companies;
+import api.CompanyInfo;
+import api.StringList;
 import core.Company;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
-@Path("/companies")
+@Path("/company")
 @Produces(MediaType.APPLICATION_JSON)
 public class CompaniesResource {
     private final HashMap<String, Company> companies;
@@ -24,9 +21,21 @@ public class CompaniesResource {
     }
 
     @GET
-    public Companies getList(@QueryParam("name") Optional<String> name) {
+    public StringList getList() {
         final Company[] value = companies.values().toArray(new Company[0]);
+        final String[] s = new String[value.length];
+        int i = 0;
+        for (Company c: value)
+            s[i++] = c.getId();
 
-        return new Companies(value);
+        return new StringList(s);
+    }
+
+    @Path("/{id}")
+    @GET
+    public CompanyInfo getInfo(@PathParam("id") String id){
+        Company c = companies.get(id);
+
+        return new CompanyInfo(c);
     }
 }

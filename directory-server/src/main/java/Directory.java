@@ -35,9 +35,9 @@ public class Directory extends Application<DirectoryConfiguration> {
         this.exchanges = new HashMap<>();
 
         Exchange e = new Exchange("NASDAQ", "192.168.1.1", "3001");
-        this.companies.put("ALPH", new Company("Google", e));
-        this.companies.put("AMZ", new Company("Amazon", e));
-        this.companies.put("MCS", new Company("Microsoft", e));
+        this.companies.put("ALPH", new Company("ALPH", "Alphabet", e));
+        this.companies.put("AMZ", new Company("AMZ", "Amazon", e));
+        this.companies.put("MCS", new Company("MCS","Microsoft", e));
         this.exchanges.put("NASDAQ", e);
 
         final CompaniesResource resource = new CompaniesResource(
