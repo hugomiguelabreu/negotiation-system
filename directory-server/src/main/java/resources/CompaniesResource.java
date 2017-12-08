@@ -1,13 +1,13 @@
 package resources;
 
 import api.CompanyInfo;
+import api.PriceInfoApi;
 import api.StringList;
 import core.Company;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
-import java.util.Optional;
 
 @Path("/company")
 @Produces(MediaType.APPLICATION_JSON)
@@ -37,5 +37,21 @@ public class CompaniesResource {
         Company c = companies.get(id);
 
         return new CompanyInfo(c);
+    }
+
+    @Path("/{id}/today")
+    @GET
+    public PriceInfoApi getTodayInfo(@PathParam("id") String id){
+        Company c = companies.get(id);
+
+        return new PriceInfoApi(c.getToday());
+    }
+
+    @Path("/{id}/yesterday")
+    @GET
+    public PriceInfoApi getYesterdayInfo(@PathParam("id") String id){
+        Company c = companies.get(id);
+
+        return new PriceInfoApi(c.getYesterday());
     }
 }
