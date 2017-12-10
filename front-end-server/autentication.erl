@@ -5,8 +5,8 @@
 % -import (account , [encode_msg/1, encode_msg/2, decode_msg/2, decode_msg/3]).
 % -import (response , [encode_msg/1, encode_msg/2, decode_msg/2, decode_msg/3]).
 
--include("account.hrl").
--include("response.hrl").
+-include("vendor/account.hrl").
+-include("vendor/response.hrl").
 
 -export([startAutentication/0]).
 
