@@ -2,6 +2,11 @@ package core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.joda.time.DateTime;
+
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.Calendar;
 
 public class Company {
 
@@ -17,7 +22,7 @@ public class Company {
 
         // For testing sake
         this.today = new PriceInfo(10, 10, 10, 10);
-        this.yesterday = new PriceInfo(12, 15, 15.7, 17.8);
+        //this.yesterday = new PriceInfo(12, 15, 15.7, 17.8);
     }
 
     @JsonProperty
@@ -30,49 +35,59 @@ public class Company {
         return this.id;
     }
 
+    @JsonProperty
+    public String getExchangeName(){
+        return this.exchange.getName();
+    }
+
     @JsonIgnore
     public Exchange getExchange() {
         return exchange;
     }
 
+    public void updatePrice(PriceInfo price){
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+
+        //Check if we need to change today to yesterday.
+        if(Timestamp.valueOf(this.today.getTimestamp()).toLocalDateTime().getDayOfMonth() < cal.get(Calendar.DAY_OF_MONTH)){
+            this.yesterday = this.today;
+            this.today = price;
+        }else{
+            this.today = price;
+        }
+    }
+
     @JsonIgnore
     public PriceInfo getToday(){
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+
+        //Check if we need to change today to yesterday.
+        if(Timestamp.valueOf(this.today.getTimestamp()).toLocalDateTime().getDayOfMonth() < cal.get(Calendar.DAY_OF_MONTH)){
+            this.yesterday = this.today;
+            this.today = new PriceInfo(0, 0, 0, 0);
+        }
+
         return this.today;
     }
 
     @JsonIgnore
     public PriceInfo getYesterday() {
-        return yesterday;
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+
+        if(Timestamp.valueOf(this.today.getTimestamp()).toLocalDateTime().getDayOfMonth() < cal.get(Calendar.DAY_OF_MONTH)) {
+            this.yesterday = this.today;
+            this.today = new PriceInfo(0, 0, 0, 0);
+        }
+
+        return this.yesterday;
+
     }
 
-    public class PriceInfo{
 
-        private double max;
-        private double min;
-        private double open;
-        private double close;
-
-        public PriceInfo(double max, double min, double open, double close){
-            this.max = max;
-            this.min = min;
-            this.open = open;
-            this.close = close;
-        }
-
-        public double getMax() {
-            return max;
-        }
-
-        public double getMin() {
-            return min;
-        }
-
-        public double getClose() {
-            return close;
-        }
-
-        public double getOpen() {
-            return open;
-        }
-    }
 }
