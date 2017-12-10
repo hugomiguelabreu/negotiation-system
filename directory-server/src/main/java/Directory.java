@@ -4,6 +4,8 @@ import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import resources.CompaniesResource;
+import resources.CompanyResource;
+import resources.ExchangeResource;
 
 import java.util.HashMap;
 
@@ -24,26 +26,42 @@ public class Directory extends Application<DirectoryConfiguration> {
 
     @Override
     public void initialize(Bootstrap<DirectoryConfiguration> bootstrap) {
-        // nothing to do yet
+        this.companies = new HashMap<>();
+        this.exchanges = new HashMap<>();
+
+
+        Exchange e = new Exchange("NASDAQ", "New York", "192.168.1.1", "3001");
+        Company c;
+        this.exchanges.put("NASDAQ", e);
+        this.exchanges.put("PSI20", new Exchange("PSI20", "Lisbon", "192.168.1.1", "3005"));
+
+        this.companies.put("ALPH", c = new Company("ALPH", "Alphabet", e));
+        e.add(c);
+        this.companies.put("AMZ", c = new Company("AMZ", "Amazon", e));
+        e.add(c);
+        this.companies.put("MCS", c = new Company("MCS","Microsoft", e));
+        e.add(c);
+
+
     }
 
     @Override
     public void run(DirectoryConfiguration configuration,
                     Environment environment) {
 
-        this.companies = new HashMap<>();
-        this.exchanges = new HashMap<>();
-
-        Exchange e = new Exchange("NASDAQ", "192.168.1.1", "3001");
-        this.companies.put("ALPH", new Company("ALPH", "Alphabet", e));
-        this.companies.put("AMZ", new Company("AMZ", "Amazon", e));
-        this.companies.put("MCS", new Company("MCS","Microsoft", e));
-        this.exchanges.put("NASDAQ", e);
-
-        final CompaniesResource resource = new CompaniesResource(
+        final CompanyResource companyresource = new CompanyResource(
             companies
         );
-        environment.jersey().register(resource);
+        final CompaniesResource companiesresource = new CompaniesResource(
+            companies
+        );
+        final ExchangeResource exchangeresource = new ExchangeResource(
+            exchanges
+        );
+
+        environment.jersey().register(companyresource);
+        environment.jersey().register(companiesresource);
+        environment.jersey().register(exchangeresource);
     }
 
 }
