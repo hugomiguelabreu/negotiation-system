@@ -1,3 +1,6 @@
 [submodule "front-end-server/vendor/protobuff/gbp"]
 	path = front-end-server/vendor/protobuff/gbp
-	url = https://github.com/tomas-abrahamsson
+	url = https://github.com/tomas-abrahamsson/gbp
+[submodule "front-end-server/vendor/protobuff/gpb"]
+	path = front-end-server/vendor/protobuff/gpb
+	url = https://github.com/tomas-abrahamsson/gpb
