@@ -5,19 +5,18 @@ import org.hibernate.validator.constraints.Length;
 
 public class StringList {
 
-    @Length(max = 2)
-    private String[] companies;
+    private String[] list;
 
     public StringList() {
         // Jackson deserialization
     }
 
-    public StringList(String[] companies) {
-        this.companies = companies;
+    public StringList(String[] list) {
+        this.list = list;
     }
 
     @JsonProperty
-    public String[] getCompanies() {
-        return companies;
+    public String[] getList() {
+        return list;
     }
 }

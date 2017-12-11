@@ -6,6 +6,7 @@ import io.dropwizard.setup.Environment;
 import resources.CompaniesResource;
 import resources.CompanyResource;
 import resources.ExchangeResource;
+import resources.ExchangesResource;
 
 import java.util.HashMap;
 
@@ -58,10 +59,14 @@ public class Directory extends Application<DirectoryConfiguration> {
         final ExchangeResource exchangeresource = new ExchangeResource(
             exchanges
         );
+        final ExchangesResource exchangesresource = new ExchangesResource(
+                exchanges
+        );
 
         environment.jersey().register(companyresource);
         environment.jersey().register(companiesresource);
         environment.jersey().register(exchangeresource);
+        environment.jersey().register(exchangesresource);
     }
 
 }

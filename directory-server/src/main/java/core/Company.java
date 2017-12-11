@@ -20,9 +20,9 @@ public class Company {
         this.name = name;
         this.exchange = exchange;
 
-        // For testing sake
+
         this.today = new PriceInfo(10, 10, 10, 10);
-        //this.yesterday = new PriceInfo(12, 15, 15.7, 17.8);
+        this.yesterday = new PriceInfo(12, 15, 15.7, 17.8);
     }
 
     @JsonProperty
@@ -36,11 +36,6 @@ public class Company {
     }
 
     @JsonProperty
-    public String getExchangeName(){
-        return this.exchange.getName();
-    }
-
-    @JsonIgnore
     public Exchange getExchange() {
         return exchange;
     }
@@ -49,13 +44,14 @@ public class Company {
 
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
-
-        //Check if we need to change today to yesterday.
-        if(Timestamp.valueOf(this.today.getTimestamp()).toLocalDateTime().getDayOfMonth() < cal.get(Calendar.DAY_OF_MONTH)){
-            this.yesterday = this.today;
-            this.today = price;
-        }else{
-            this.today = price;
+        synchronized (this) {
+            //Check if we need to change today to yesterday.
+            if (Timestamp.valueOf(this.today.getTimestamp()).toLocalDateTime().getDayOfMonth() < cal.get(Calendar.DAY_OF_MONTH)) {
+                this.yesterday = this.today;
+                this.today = price;
+            } else {
+                this.today = price;
+            }
         }
     }
 
