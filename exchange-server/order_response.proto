@@ -1,0 +1,7 @@
+syntax = "proto2";
+package order;
+option java_package = "data";
+
+message OrderResponse {
+	required bool confirmation = 1;
+}
