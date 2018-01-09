@@ -1,6 +1,7 @@
 package api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import core.Company;
 
 public class CompaniesList {
@@ -15,7 +16,7 @@ public class CompaniesList {
         this.list = list;
     }
 
-    @JsonProperty
+    @JsonValue
     public Company[] getCompanies() {
         return list;
     }

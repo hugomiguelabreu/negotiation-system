@@ -1,6 +1,7 @@
 package api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import core.Company;
 import org.hibernate.validator.constraints.Length;
 
@@ -16,7 +17,7 @@ public class CompanyInfo {
         this.company = company;
     }
 
-    @JsonProperty
+    @JsonValue
     public Company getCompany() {
         return this.company;
     }

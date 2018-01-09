@@ -1,6 +1,7 @@
 package api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import core.Exchange;
 import org.hibernate.validator.constraints.Length;
 
@@ -16,7 +17,7 @@ public class ExchangeList {
         this.list = list;
     }
 
-    @JsonProperty
+    @JsonValue
     public Exchange[] getExchanges() {
         return list;
     }

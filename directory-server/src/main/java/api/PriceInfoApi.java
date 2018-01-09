@@ -1,6 +1,7 @@
 package api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import core.Company;
 import core.PriceInfo;
 
@@ -16,7 +17,7 @@ public class PriceInfoApi {
         this.price = price;
     }
 
-    @JsonProperty
+    @JsonValue
     public PriceInfo priceInfo() {
         return this.price;
     }

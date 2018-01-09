@@ -1,6 +1,7 @@
 package api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import core.Exchange;
 
 
@@ -16,7 +17,7 @@ public class ExchangeInfo {
         this.exchange = exchange;
     }
 
-    @JsonProperty
+    @JsonValue
     public Exchange getExchange() {
         return this.exchange;
     }
