@@ -55,7 +55,7 @@ public class Company {
         }
     }
 
-    @JsonIgnore
+    @JsonProperty
     public PriceInfo getToday(){
 
         Calendar cal = Calendar.getInstance();
@@ -70,7 +70,7 @@ public class Company {
         return this.today;
     }
 
-    @JsonIgnore
+    @JsonProperty
     public PriceInfo getYesterday() {
 
         Calendar cal = Calendar.getInstance();
