@@ -2,7 +2,6 @@ package resources;
 
 import api.CompanyInfo;
 import api.PriceInfoApi;
-import api.StringList;
 import core.Company;
 import core.PriceInfo;
 

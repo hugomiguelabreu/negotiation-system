@@ -1,6 +1,6 @@
 package resources;
 
-import api.StringList;
+import api.ExchangeList;
 import core.Exchange;
 
 import javax.ws.rs.GET;
@@ -21,14 +21,10 @@ public class ExchangesResource {
     }
 
     @GET
-    public StringList getList() {
+    public ExchangeList getList() {
         final Exchange[] value = exchange.values().toArray(new Exchange[0]);
-        final String[] s = new String[value.length];
-        int i = 0;
-        for (Exchange c: value)
-            s[i++] = c.getName();
 
-        return new StringList(s);
+        return new ExchangeList(value);
     }
 
 }

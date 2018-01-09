@@ -1,22 +1,23 @@
 package api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import core.Exchange;
 import org.hibernate.validator.constraints.Length;
 
-public class StringList {
+public class ExchangeList {
 
-    private String[] list;
+    private Exchange[] list;
 
-    public StringList() {
+    public ExchangeList() {
         // Jackson deserialization
     }
 
-    public StringList(String[] list) {
+    public ExchangeList(Exchange[] list) {
         this.list = list;
     }
 
     @JsonProperty
-    public String[] getList() {
+    public Exchange[] getExchanges() {
         return list;
     }
 }

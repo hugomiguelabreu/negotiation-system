@@ -1,6 +1,6 @@
 package resources;
 
-import api.StringList;
+import api.CompaniesList;
 import core.Company;
 
 import javax.ws.rs.*;
@@ -19,14 +19,10 @@ public class CompaniesResource {
     }
 
     @GET
-    public StringList getList() {
+    public CompaniesList getList() {
         final Company[] value = companies.values().toArray(new Company[0]);
-        final String[] s = new String[value.length];
-        int i = 0;
-        for (Company c: value)
-            s[i++] = c.getId();
 
-        return new StringList(s);
+        return new CompaniesList(value);
     }
 
 }

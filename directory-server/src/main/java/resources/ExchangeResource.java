@@ -1,7 +1,7 @@
 package resources;
 
+import api.CompaniesList;
 import api.ExchangeInfo;
-import api.StringList;
 import core.Company;
 import core.Exchange;
 
@@ -31,14 +31,10 @@ public class ExchangeResource {
 
     @Path("/{id}/companies")
     @GET
-    public StringList getCompanies(@PathParam("id") String id) {
+    public CompaniesList getCompanies(@PathParam("id") String id) {
         final Company[] value = exchanges.get(id).getCompanies();
-        final String[] s = new String[value.length];
-        int i = 0;
-        for (Company c: value)
-            s[i++] = c.getId();
 
-        return new StringList(s);
+        return new CompaniesList(value);
 
     }
 
