@@ -11,17 +11,18 @@ public class Listener {
 
         ServerSocket svSocket = new ServerSocket(3001);
 
-        Thread publisher = (new Thread(new Publisher()));
-        publisher.start();
+        // Inicia Thread que irá publica exchanges efetuadas
+        Publisher publisher = new Publisher();
+        (new Thread(publisher)).start();
 
         Database db = new Database(publisher);
 
         boolean submited = false;
 
-        while (true) { // aqui estará as horas
+        while (true) { // TODO: introduzir horas
             while (true) {
                 Socket socket = svSocket.accept();
-                (new Thread(new Handler(socket, db))).start();
+                (new Thread(new Handler(socket, db, publisher))).start();
             }
         }
 

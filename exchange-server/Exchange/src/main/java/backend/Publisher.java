@@ -1,16 +1,19 @@
 package backend;
 
 import org.zeromq.ZMQ;
+
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Publisher implements Runnable{
 
-    private ConcurrentLinkedQueue<String> toSend;
+    private BlockingQueue<String> toSend;
     private ZMQ.Context context;
     private ZMQ.Socket socket;
 
     public Publisher() {
-        toSend = new ConcurrentLinkedQueue<>();
+        toSend = new LinkedBlockingQueue<>();
         context = ZMQ.context(1);
         socket = context.socket(ZMQ.PUB);
         socket.bind("tcp://*:3002");
@@ -23,7 +26,12 @@ public class Publisher implements Runnable{
     @Override
     public void run() {
         while(true){
-            String send = toSend.poll();
+            String send = null;
+            try {
+                send = toSend.take();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             socket.send(send.getBytes());
         }
     }

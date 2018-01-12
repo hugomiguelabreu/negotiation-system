@@ -11,19 +11,23 @@ public class Handler implements Runnable{
 
     private Socket socket;
     private Database db;
+    private Publisher publisher;
 
-    public Handler(Socket socket, Database db) {
+    public Handler(Socket socket, Database db, Publisher publisher) {
         this.socket = socket;
         this.db = db;
+        this.publisher = publisher;
     }
 
     @Override
     public void run() {
         try {
             Order o = Order.parseFrom(socket.getInputStream());
-            db.getMatch(o);
+                db.getMatch(o);
+
             OrderResponse response = OrderResponse.newBuilder().setConfirmation(true).build();
-            response.writeTo(socket.getOutputStream());
+                response.writeTo(socket.getOutputStream());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
