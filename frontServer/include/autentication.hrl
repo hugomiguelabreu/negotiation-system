@@ -1,0 +1,3 @@
+-ifndef(autentication).
+-define(autentication, true).
+-endif.
