@@ -9,15 +9,15 @@ public abstract class QueuedOrder {
     protected String user;
     protected String symbol;
     protected int quantity;
-    protected double setValue;
+    protected double price;
     protected Publisher publisher;
 
 
-    public QueuedOrder(String user, String symbol, int quantity, double setValue, Publisher publisher) {
+    public QueuedOrder(String user, String symbol, int quantity, double price, Publisher publisher) {
         this.user = user;
         this.symbol = symbol;
         this.quantity = quantity;
-        this.setValue = setValue;
+        this.price = price;
         this.publisher = publisher;
     }
 
@@ -44,8 +44,8 @@ public abstract class QueuedOrder {
         return symbol;
     }
 
-    public double getSetValue() {
-        return setValue;
+    public double getPrice() {
+        return price;
     }
 
     public abstract int match(OrderOuterClass.Order order);

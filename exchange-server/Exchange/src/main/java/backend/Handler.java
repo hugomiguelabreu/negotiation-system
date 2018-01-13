@@ -22,25 +22,19 @@ public class Handler implements Runnable{
     @Override
     public void run() {
         try {
+            System.out.println("New connection!");
+
             Order o = Order.parseFrom(socket.getInputStream());
-                db.getMatch(o);
+            System.out.println("Received probuf message: \n" + o);
+
+            db.getMatch(o);
 
             OrderResponse response = OrderResponse.newBuilder().setConfirmation(true).build();
-                response.writeTo(socket.getOutputStream());
+            response.writeTo(socket.getOutputStream());
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void notifyUser(Order o) {
-        try {
-            Socket s = new Socket("localhost", 3002);
-            o.writeTo(s.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 }
 

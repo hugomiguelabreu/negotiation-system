@@ -30,6 +30,8 @@ public class Database {
         else
             orders = buyOrders.get(o.getSymbol());
 
+        //TODO: falta apagar qd acaba
+
         int new_qty = o.getQuantity();
 
         synchronized (orders){
@@ -39,7 +41,6 @@ public class Database {
 
             if (new_qty > 0)
                 orders.add(QueuedOrder.create(o,new_qty, publisher));
-            else
 
         }
     }

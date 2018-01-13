@@ -1,7 +1,10 @@
 package backend;
 
+import data.OrderOuterClass;
 import org.zeromq.ZMQ;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -35,4 +38,14 @@ public class Publisher implements Runnable{
             socket.send(send.getBytes());
         }
     }
+
+    public static void notifyUser(OrderOuterClass.Order o) {
+        try {
+            Socket s = new Socket("localhost", 3002);
+            o.writeTo(s.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

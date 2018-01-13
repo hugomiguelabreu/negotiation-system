@@ -12,6 +12,6 @@ message Order {
 	required Type orderType = 0;
 	required string symbol = 1;
 	required int32 quantity = 2;
-	required double set_price = 3;
+	required double price = 3;
 	required string user = 4;
 }
