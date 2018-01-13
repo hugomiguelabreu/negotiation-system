@@ -31,10 +31,10 @@ public class Directory extends Application<DirectoryConfiguration> {
         this.exchanges = new HashMap<>();
 
 
-        Exchange e = new Exchange("NASDAQ", "New York", "192.168.1.1", "3001");
+        Exchange e = new Exchange("NASDAQ", "New York", "localhost", "3001");
         Company c;
         this.exchanges.put("NASDAQ", e);
-        this.exchanges.put("PSI20", new Exchange("PSI20", "Lisbon", "192.168.1.1", "3005"));
+        this.exchanges.put("PSI20", new Exchange("PSI20", "Lisbon", "localhost", "3005"));
 
         this.companies.put("ALPH", c = new Company("ALPH", "Alphabet", e));
         e.add(c);
