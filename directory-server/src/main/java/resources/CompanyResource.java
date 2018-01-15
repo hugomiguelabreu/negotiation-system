@@ -40,9 +40,6 @@ public class CompanyResource {
         return new PriceInfoApi(c.getToday());
     }
 
-    /*
-    A terminar
-     */
     @Path("/{id}/today")
     @PUT
     public Response putTodayInfo(@PathParam("id") String id, @Valid PriceInfo price){

@@ -17,7 +17,13 @@ public class Subscriber extends Thread{
     }
 
     public void addSubscription(String addr, String company){
-        //ip:port
+        //ip:port+1
+        String[] aux = addr.split(":");
+        String addressAux = aux[0];
+        int port = Integer.parseInt(aux[1]);
+        port++;
+
+        addr = addressAux + ":" + port;
         if(!connections.contains(addr)) {
             socket.connect("tcp://" + addr);
             connections.add(addr);
