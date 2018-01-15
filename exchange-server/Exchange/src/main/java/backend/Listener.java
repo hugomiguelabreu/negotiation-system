@@ -22,7 +22,7 @@ public class Listener {
         while (true) { // TODO: introduzir horas
             while (true) {
                 Socket socket = svSocket.accept();
-                (new Thread(new Handler(socket, db, publisher))).start();
+                (new Handler(socket, db, publisher)).start();
             }
         }
 

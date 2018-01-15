@@ -7,7 +7,7 @@ import data.OrderResponseOuterClass.OrderResponse;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Handler implements Runnable{
+public class Handler extends Thread{
 
     private Socket socket;
     private Database db;

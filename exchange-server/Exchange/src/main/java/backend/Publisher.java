@@ -39,6 +39,7 @@ public class Publisher extends Thread{
         }
     }
 
+    //Y? What does it mean?
     public static void notifyUser(OrderOuterClass.Order o) {
         try {
             Socket s = new Socket("localhost", 3002);
