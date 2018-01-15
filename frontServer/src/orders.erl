@@ -34,15 +34,16 @@ forwarder(LSocket) ->
 get_data(FROM)->
 	receive
 		{tcp, FROM, DATA} ->
-			Ret = order:decode_msg(DATA, 'Order'),
-			Type = Ret#'Order'.orderType,
-			Symbol = Ret#'Order'.symbol,
-			Quant = Ret#'Order'.quantity,
-			Price = Ret#'Order'.price,
-			User = Ret#'Order'.user,
-			io:format("decoded\n"),
-			XX = order:encode_msg(#'Order'{orderType = 1 , symbol = Symbol, quantity = Quant, price = Price, user = User}),
-			XX;
+			% Ret = order:decode_msg(DATA, 'Order'),
+			% Type = Ret#'Order'.orderType,
+			% Symbol = Ret#'Order'.symbol,
+			% Quant = Ret#'Order'.quantity,
+			% Price = Ret#'Order'.price,
+			% User = Ret#'Order'.user,
+			% io:format("decoded\n"),
+			% XX = order:encode_msg(#'Order'{orderType = Type , symbol = Symbol, quantity = Quant, price = Price, user = User}),
+			% XX;
+			DATA;
 
 		{tcp_closed, FROM} ->
       		exit("user closed");

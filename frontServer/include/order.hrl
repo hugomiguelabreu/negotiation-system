@@ -10,11 +10,11 @@
 -ifndef('ORDER_PB_H').
 -define('ORDER_PB_H', true).
 -record('Order',
-        {orderType              :: 'BUY' | 'SELL' | integer(), % = 0, enum Order.Type
-         symbol                 :: iodata(),        % = 1
-         quantity               :: integer(),       % = 2, 32 bits
-         price                  :: float() | integer() | infinity | '-infinity' | nan, % = 3
-         user                   :: iodata()         % = 4
+        {orderType              :: boolean() | 0 | 1, % = 1
+         symbol                 :: iodata(),        % = 2
+         quantity               :: integer(),       % = 3, 32 bits
+         price                  :: float() | integer() | infinity | '-infinity' | nan, % = 4
+         user                   :: iodata()         % = 5
         }).
 -endif.
 

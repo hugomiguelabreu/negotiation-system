@@ -15,7 +15,6 @@
 -export([find_msg_def/1, fetch_msg_def/1]).
 -export([find_enum_def/1, fetch_enum_def/1]).
 -export([enum_symbol_by_value/2, enum_value_by_symbol/2]).
--export(['enum_symbol_by_value_Order.Type'/1, 'enum_value_by_symbol_Order.Type'/1]).
 -export([get_service_names/0]).
 -export([get_service_def/1]).
 -export([get_rpc_names/1]).
@@ -27,8 +26,8 @@
 -include("gpb.hrl").
 
 %% enumerated types
--type 'Order.Type'() :: 'BUY' | 'SELL'.
--export_type(['Order.Type'/0]).
+
+-export_type([]).
 
 %% message types
 -type 'Order'() :: #'Order'{}.
@@ -60,28 +59,24 @@ e_msg_Order(#'Order'{orderType = F1, symbol = F2,
 	    Bin, TrUserData) ->
     B1 = begin
 	   TrF1 = id(F1, TrUserData),
-	   'e_enum_Order.Type'(TrF1, <<Bin/binary, 0>>)
+	   e_type_bool(TrF1, <<Bin/binary, 8>>)
 	 end,
     B2 = begin
 	   TrF2 = id(F2, TrUserData),
-	   e_type_string(TrF2, <<B1/binary, 10>>)
+	   e_type_string(TrF2, <<B1/binary, 18>>)
 	 end,
     B3 = begin
 	   TrF3 = id(F3, TrUserData),
-	   e_type_int32(TrF3, <<B2/binary, 16>>)
+	   e_type_int32(TrF3, <<B2/binary, 24>>)
 	 end,
     B4 = begin
 	   TrF4 = id(F4, TrUserData),
-	   e_type_double(TrF4, <<B3/binary, 25>>)
+	   e_type_double(TrF4, <<B3/binary, 33>>)
 	 end,
     begin
       TrF5 = id(F5, TrUserData),
-      e_type_string(TrF5, <<B4/binary, 34>>)
+      e_type_string(TrF5, <<B4/binary, 42>>)
     end.
-
-'e_enum_Order.Type'('BUY', Bin) -> <<Bin/binary, 1>>;
-'e_enum_Order.Type'('SELL', Bin) -> <<Bin/binary, 2>>;
-'e_enum_Order.Type'(V, Bin) -> e_varint(V, Bin).
 
 e_type_int32(Value, Bin)
     when 0 =< Value, Value =< 127 ->
@@ -89,6 +84,11 @@ e_type_int32(Value, Bin)
 e_type_int32(Value, Bin) ->
     <<N:64/unsigned-native>> = <<Value:64/signed-native>>,
     e_varint(N, Bin).
+
+e_type_bool(true, Bin) -> <<Bin/binary, 1>>;
+e_type_bool(false, Bin) -> <<Bin/binary, 0>>;
+e_type_bool(1, Bin) -> <<Bin/binary, 1>>;
+e_type_bool(0, Bin) -> <<Bin/binary, 0>>.
 
 e_type_string(S, Bin) ->
     Utf8 = unicode:characters_to_binary(S),
@@ -136,23 +136,23 @@ d_msg_Order(Bin, TrUserData) ->
 			     id(undefined, TrUserData),
 			     id(undefined, TrUserData), TrUserData).
 
-dfp_read_field_def_Order(<<0, Rest/binary>>, Z1, Z2,
+dfp_read_field_def_Order(<<8, Rest/binary>>, Z1, Z2,
 			 F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
     d_field_Order_orderType(Rest, Z1, Z2, F@_1, F@_2, F@_3,
 			    F@_4, F@_5, TrUserData);
-dfp_read_field_def_Order(<<10, Rest/binary>>, Z1, Z2,
+dfp_read_field_def_Order(<<18, Rest/binary>>, Z1, Z2,
 			 F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
     d_field_Order_symbol(Rest, Z1, Z2, F@_1, F@_2, F@_3,
 			 F@_4, F@_5, TrUserData);
-dfp_read_field_def_Order(<<16, Rest/binary>>, Z1, Z2,
+dfp_read_field_def_Order(<<24, Rest/binary>>, Z1, Z2,
 			 F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
     d_field_Order_quantity(Rest, Z1, Z2, F@_1, F@_2, F@_3,
 			   F@_4, F@_5, TrUserData);
-dfp_read_field_def_Order(<<25, Rest/binary>>, Z1, Z2,
+dfp_read_field_def_Order(<<33, Rest/binary>>, Z1, Z2,
 			 F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
     d_field_Order_price(Rest, Z1, Z2, F@_1, F@_2, F@_3,
 			F@_4, F@_5, TrUserData);
-dfp_read_field_def_Order(<<34, Rest/binary>>, Z1, Z2,
+dfp_read_field_def_Order(<<42, Rest/binary>>, Z1, Z2,
 			 F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
     d_field_Order_user(Rest, Z1, Z2, F@_1, F@_2, F@_3, F@_4,
 		       F@_5, TrUserData);
@@ -174,19 +174,19 @@ dg_read_field_def_Order(<<0:1, X:7, Rest/binary>>, N,
 			Acc, F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
     Key = X bsl N + Acc,
     case Key of
-      0 ->
+      8 ->
 	  d_field_Order_orderType(Rest, 0, 0, F@_1, F@_2, F@_3,
 				  F@_4, F@_5, TrUserData);
-      10 ->
+      18 ->
 	  d_field_Order_symbol(Rest, 0, 0, F@_1, F@_2, F@_3, F@_4,
 			       F@_5, TrUserData);
-      16 ->
+      24 ->
 	  d_field_Order_quantity(Rest, 0, 0, F@_1, F@_2, F@_3,
 				 F@_4, F@_5, TrUserData);
-      25 ->
+      33 ->
 	  d_field_Order_price(Rest, 0, 0, F@_1, F@_2, F@_3, F@_4,
 			      F@_5, TrUserData);
-      34 ->
+      42 ->
 	  d_field_Order_user(Rest, 0, 0, F@_1, F@_2, F@_3, F@_4,
 			     F@_5, TrUserData);
       _ ->
@@ -220,15 +220,7 @@ d_field_Order_orderType(<<1:1, X:7, Rest/binary>>, N,
 			    F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData);
 d_field_Order_orderType(<<0:1, X:7, Rest/binary>>, N,
 			Acc, _, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
-    {NewFValue, RestF} = {'d_enum_Order.Type'(begin
-						<<Res:32/signed-native>> = <<(X
-										bsl
-										N
-										+
-										Acc):32/unsigned-native>>,
-						Res
-					      end),
-			  Rest},
+    {NewFValue, RestF} = {X bsl N + Acc =/= 0, Rest},
     dfp_read_field_def_Order(RestF, 0, 0, NewFValue, F@_2,
 			     F@_3, F@_4, F@_5, TrUserData).
 
@@ -334,10 +326,6 @@ skip_64_Order(<<_:64, Rest/binary>>, Z1, Z2, F@_1, F@_2,
     dfp_read_field_def_Order(Rest, Z1, Z2, F@_1, F@_2, F@_3,
 			     F@_4, F@_5, TrUserData).
 
-'d_enum_Order.Type'(1) -> 'BUY';
-'d_enum_Order.Type'(2) -> 'SELL';
-'d_enum_Order.Type'(V) -> V.
-
 read_group(Bin, FieldNum) ->
     {NumBytes, EndTagLen} = read_gr_b(Bin, 0, 0, 0, 0, FieldNum),
     <<Group:NumBytes/binary, _:EndTagLen/binary, Rest/binary>> = Bin,
@@ -427,31 +415,12 @@ verify_msg(Msg, Opts) ->
 v_msg_Order(#'Order'{orderType = F1, symbol = F2,
 		     quantity = F3, price = F4, user = F5},
 	    Path, _) ->
-    'v_enum_Order.Type'(F1, [orderType | Path]),
+    v_type_bool(F1, [orderType | Path]),
     v_type_string(F2, [symbol | Path]),
     v_type_int32(F3, [quantity | Path]),
     v_type_double(F4, [price | Path]),
     v_type_string(F5, [user | Path]),
     ok.
-
--dialyzer({nowarn_function,'v_enum_Order.Type'/2}).
-'v_enum_Order.Type'('BUY', _Path) -> ok;
-'v_enum_Order.Type'('SELL', _Path) -> ok;
-'v_enum_Order.Type'(V, Path) when is_integer(V) ->
-    v_type_sint32(V, Path);
-'v_enum_Order.Type'(X, Path) ->
-    mk_type_error({invalid_enum, 'Order.Type'}, X, Path).
-
--dialyzer({nowarn_function,v_type_sint32/2}).
-v_type_sint32(N, _Path)
-    when -2147483648 =< N, N =< 2147483647 ->
-    ok;
-v_type_sint32(N, Path) when is_integer(N) ->
-    mk_type_error({value_out_of_range, sint32, signed, 32},
-		  N, Path);
-v_type_sint32(X, Path) ->
-    mk_type_error({bad_integer, sint32, signed, 32}, X,
-		  Path).
 
 -dialyzer({nowarn_function,v_type_int32/2}).
 v_type_int32(N, _Path)
@@ -463,6 +432,14 @@ v_type_int32(N, Path) when is_integer(N) ->
 v_type_int32(X, Path) ->
     mk_type_error({bad_integer, int32, signed, 32}, X,
 		  Path).
+
+-dialyzer({nowarn_function,v_type_bool/2}).
+v_type_bool(false, _Path) -> ok;
+v_type_bool(true, _Path) -> ok;
+v_type_bool(0, _Path) -> ok;
+v_type_bool(1, _Path) -> ok;
+v_type_bool(X, Path) ->
+    mk_type_error(bad_boolean_value, X, Path).
 
 -dialyzer({nowarn_function,v_type_double/2}).
 v_type_double(N, _Path) when is_float(N) -> ok;
@@ -505,18 +482,16 @@ id(X, _TrUserData) -> X.
 
 
 get_msg_defs() ->
-    [{{enum, 'Order.Type'}, [{'BUY', 1}, {'SELL', 2}]},
-     {{msg, 'Order'},
-      [#field{name = orderType, fnum = 0, rnum = 2,
-	      type = {enum, 'Order.Type'}, occurrence = required,
-	      opts = []},
-       #field{name = symbol, fnum = 1, rnum = 3, type = string,
+    [{{msg, 'Order'},
+      [#field{name = orderType, fnum = 1, rnum = 2,
+	      type = bool, occurrence = required, opts = []},
+       #field{name = symbol, fnum = 2, rnum = 3, type = string,
 	      occurrence = required, opts = []},
-       #field{name = quantity, fnum = 2, rnum = 4,
+       #field{name = quantity, fnum = 3, rnum = 4,
 	      type = int32, occurrence = required, opts = []},
-       #field{name = price, fnum = 3, rnum = 5, type = double,
+       #field{name = price, fnum = 4, rnum = 5, type = double,
 	      occurrence = required, opts = []},
-       #field{name = user, fnum = 4, rnum = 6, type = string,
+       #field{name = user, fnum = 5, rnum = 6, type = string,
 	      occurrence = required, opts = []}]}].
 
 
@@ -529,7 +504,7 @@ get_group_names() -> [].
 get_msg_or_group_names() -> ['Order'].
 
 
-get_enum_names() -> ['Order.Type'].
+get_enum_names() -> [].
 
 
 fetch_msg_def(MsgName) ->
@@ -539,47 +514,37 @@ fetch_msg_def(MsgName) ->
     end.
 
 
+-spec fetch_enum_def(_) -> no_return().
 fetch_enum_def(EnumName) ->
-    case find_enum_def(EnumName) of
-      Es when is_list(Es) -> Es;
-      error -> erlang:error({no_such_enum, EnumName})
-    end.
+    erlang:error({no_such_enum, EnumName}).
 
 
 find_msg_def('Order') ->
-    [#field{name = orderType, fnum = 0, rnum = 2,
-	    type = {enum, 'Order.Type'}, occurrence = required,
-	    opts = []},
-     #field{name = symbol, fnum = 1, rnum = 3, type = string,
+    [#field{name = orderType, fnum = 1, rnum = 2,
+	    type = bool, occurrence = required, opts = []},
+     #field{name = symbol, fnum = 2, rnum = 3, type = string,
 	    occurrence = required, opts = []},
-     #field{name = quantity, fnum = 2, rnum = 4,
+     #field{name = quantity, fnum = 3, rnum = 4,
 	    type = int32, occurrence = required, opts = []},
-     #field{name = price, fnum = 3, rnum = 5, type = double,
+     #field{name = price, fnum = 4, rnum = 5, type = double,
 	    occurrence = required, opts = []},
-     #field{name = user, fnum = 4, rnum = 6, type = string,
+     #field{name = user, fnum = 5, rnum = 6, type = string,
 	    occurrence = required, opts = []}];
 find_msg_def(_) -> error.
 
 
-find_enum_def('Order.Type') ->
-    [{'BUY', 1}, {'SELL', 2}];
 find_enum_def(_) -> error.
 
 
-enum_symbol_by_value('Order.Type', Value) ->
-    'enum_symbol_by_value_Order.Type'(Value).
+-spec enum_symbol_by_value(_, _) -> no_return().
+enum_symbol_by_value(E, V) ->
+    erlang:error({no_enum_defs, E, V}).
 
 
-enum_value_by_symbol('Order.Type', Sym) ->
-    'enum_value_by_symbol_Order.Type'(Sym).
+-spec enum_value_by_symbol(_, _) -> no_return().
+enum_value_by_symbol(E, V) ->
+    erlang:error({no_enum_defs, E, V}).
 
-
-'enum_symbol_by_value_Order.Type'(1) -> 'BUY';
-'enum_symbol_by_value_Order.Type'(2) -> 'SELL'.
-
-
-'enum_value_by_symbol_Order.Type'('BUY') -> 1;
-'enum_value_by_symbol_Order.Type'('SELL') -> 2.
 
 
 get_service_names() -> [].
