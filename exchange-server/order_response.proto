@@ -3,5 +3,6 @@ package order;
 option java_package = "data";
 
 message OrderResponse {
-	required bool confirmation = 1;
+	required string name = 1;
+	required bool confirmation = 2;
 }
