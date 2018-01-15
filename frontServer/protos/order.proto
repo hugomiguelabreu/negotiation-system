@@ -1,0 +1,17 @@
+syntax = "proto2";
+package order;
+option java_package = "data";
+
+message Order {
+	
+	enum Type {
+		BUY = 1;
+		SELL = 2;
+	}
+
+	required Type orderType = 0;
+	required string symbol = 1;
+	required int32 quantity = 2;
+	required double price = 3;
+	required string user = 4;
+}

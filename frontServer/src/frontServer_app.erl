@@ -16,7 +16,7 @@
 %%====================================================================
 
 start() ->
-	spawn(autentication, startAutentication , [] ).
+	spawn(autentication, startAutentication, []).
     %frontServer_sup:start_link().
 
 %%--------------------------------------------------------------------
