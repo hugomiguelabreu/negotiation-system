@@ -2,8 +2,6 @@ package data;
 
 import backend.Publisher;
 
-import static data.OrderOuterClass.Order.Type.*;
-
 public abstract class QueuedOrder {
 
     protected String user;
@@ -22,10 +20,10 @@ public abstract class QueuedOrder {
     }
 
     public static QueuedOrder create(OrderOuterClass.Order o, int quantity, Publisher publisher){
-        if (o.getOrderType() == BUY)
-            return new BuyQueuedOrder(o.getUser(),o.getSymbol(),quantity,o.getSetPrice(), publisher);
+        if (o.getOrderType())
+            return new BuyQueuedOrder(o.getUser(),o.getSymbol(),quantity,o.getPrice(), publisher);
         else
-            return new SellQueuedOrder(o.getUser(),o.getSymbol(),quantity,o.getSetPrice(), publisher);
+            return new SellQueuedOrder(o.getUser(),o.getSymbol(),quantity,o.getPrice(), publisher);
     }
 
     public int getQuantity() {

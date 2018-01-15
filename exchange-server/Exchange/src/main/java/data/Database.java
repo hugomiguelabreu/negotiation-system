@@ -7,8 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import backend.Publisher;
 import data.OrderOuterClass.Order;
 
-import static data.OrderOuterClass.Order.Type.BUY;
-
 public class Database {
 
     private Publisher publisher; // where to publish when a deal is done
@@ -25,7 +23,7 @@ public class Database {
 
         List<QueuedOrder> orders;
 
-        if (o.getOrderType() == BUY)
+        if (o.getOrderType())
             orders = sellOrders.get(o.getSymbol());
         else
             orders = buyOrders.get(o.getSymbol());
