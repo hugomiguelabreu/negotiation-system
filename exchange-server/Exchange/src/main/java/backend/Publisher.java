@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Publisher implements Runnable{
+public class Publisher extends Thread{
 
     private BlockingQueue<String> toSend;
     private ZMQ.Context context;

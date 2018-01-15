@@ -11,9 +11,9 @@ public class Listener {
 
         ServerSocket svSocket = new ServerSocket(3001);
 
-        // Inicia Thread que irá publica exchanges efetuadas
+        // Inicia Thread que irá publicar exchanges efetuadas
         Publisher publisher = new Publisher();
-        (new Thread(publisher)).start();
+        publisher.start();
 
         Database db = new Database(publisher);
 
