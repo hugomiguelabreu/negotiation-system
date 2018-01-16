@@ -24,6 +24,7 @@ public class Subscriber extends Thread{
         port++;
 
         addr = addressAux + ":" + port;
+
         if(!connections.contains(addr)) {
             socket.connect("tcp://" + addr);
             connections.add(addr);

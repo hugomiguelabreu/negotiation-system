@@ -5,7 +5,28 @@
 
 %input port set to 3000
 %export port set to 3001
-	
+
+startOrders() ->
+	login_manager:start(), %da start ao manager
+	{ok, LSock} = gen_tcp:listen(3000, [binary, {nodelay, true}, {reuseaddr, true}]),
+	acceptor(LSock).
+
+acceptor(LSock) ->
+	{ok, Sock} = gen_tcp:accept(LSock),
+	spawn(fun() -> acceptor(LSock) end),
+	forwarder(Sock).
+
+
+% este mano recebe order.proto do cliente e manda para o servidor
+% forwarder(Sock) ->
+% 	receive
+% 		{tcp, From, Data} ->
+% 			% abre o protobuff e ve o symbol
+% 			% ve na cache e manda para o servidor coorespondente
+
+
+
+
 init() -> 
 	{ok, LSocket} =  gen_tcp:listen(3000, [binary, {nodelay, true} , {reuseaddr, true}]),
 	spawn(fun() -> forwarder(LSocket) end).

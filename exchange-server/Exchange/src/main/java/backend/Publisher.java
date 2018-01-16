@@ -38,7 +38,7 @@ public class Publisher extends Thread{
         }
     }
 
-    //Y? What does it mean?
+    //TODO: REVERIFICAR A PORTA DE RESPOSTA
     public static void notifyUser(OrderOuterClass.Order o) {
         try {
             Socket s = new Socket("localhost", 3002);
