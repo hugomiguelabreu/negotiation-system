@@ -15,6 +15,17 @@
 %% API
 %%====================================================================
 
+    % mnesia:create_table(painting,
+    %     [ {disc_copies, [node()] },
+    %          {attributes,      
+    %             record_info(fields,painting)} ]).
+
+
+%%====================================================================
+%% TODO : MNESIA pq sim
+%%====================================================================
+
+
 start() ->
 	spawn(autentication, startAutentication, []).
     %frontServer_sup:start_link().
