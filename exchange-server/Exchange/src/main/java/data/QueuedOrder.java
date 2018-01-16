@@ -1,6 +1,8 @@
 package data;
 
 import backend.Publisher;
+import data.OrderOuterClass.Order;
+
 
 public abstract class QueuedOrder {
 
@@ -10,7 +12,6 @@ public abstract class QueuedOrder {
     protected double price;
     protected Publisher publisher;
 
-
     public QueuedOrder(String user, String symbol, int quantity, double price, Publisher publisher) {
         this.user = user;
         this.symbol = symbol;
@@ -19,7 +20,7 @@ public abstract class QueuedOrder {
         this.publisher = publisher;
     }
 
-    public static QueuedOrder create(OrderOuterClass.Order o, int quantity, Publisher publisher){
+    public static QueuedOrder create(Order o, int quantity, Publisher publisher){
         if (o.getOrderType())
             return new BuyQueuedOrder(o.getUser(),o.getSymbol(),quantity,o.getPrice(), publisher);
         else
@@ -46,7 +47,7 @@ public abstract class QueuedOrder {
         return price;
     }
 
-    public abstract int match(OrderOuterClass.Order order);
+    public abstract int match(Order order, PriceStats priceStats);
 }
 
 

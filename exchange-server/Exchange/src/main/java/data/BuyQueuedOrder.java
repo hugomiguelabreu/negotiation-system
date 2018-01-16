@@ -1,7 +1,7 @@
 package data;
 
 import backend.Publisher;
-import data.OrderOuterClass.Order;
+import data.protobuf.OrderOuterClass.Order;
 
 public class BuyQueuedOrder extends QueuedOrder {
 
@@ -9,7 +9,7 @@ public class BuyQueuedOrder extends QueuedOrder {
         super(user, symbol, quantity, setValue, publisher);
     }
 
-    private void sendNotification(int sold, OrderOuterClass.Order order){
+    private void sendNotification(int sold, Order order){
         StringBuilder sb = new StringBuilder();
         sb.append("User ").append(user).append(" sold ").append(sold).append(" of ").append(symbol).append(".");
         publisher.sendNotification(sb.toString());
@@ -30,7 +30,7 @@ public class BuyQueuedOrder extends QueuedOrder {
 
 
     @Override
-    public int match(OrderOuterClass.Order order) {
+    public int match(Order order, PriceStats priceStats) {
 
         int quantity_sold;
 
@@ -47,6 +47,7 @@ public class BuyQueuedOrder extends QueuedOrder {
         }
 
         sendNotification(quantity_sold, order);
+        priceStats.checkValue((price + order.getPrice())/2);
 
         return quantity_sold;
     }

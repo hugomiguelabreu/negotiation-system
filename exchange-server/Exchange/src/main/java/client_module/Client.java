@@ -1,9 +1,7 @@
 package client_module;
 
-import data.OrderOuterClass;
 import data.OrderOuterClass.Order;
 import data.OrderResponseOuterClass.OrderResponse;
-import data.OrderResponseOuterClass;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -16,7 +14,7 @@ public class Client {
 
         Order o = Order.newBuilder()
                 .setOrderType(true)
-                .setSymbol("ecks")
+                .setSymbol("MERDA")
                 .setQuantity(123)
                 .setPrice(69)
                 .setUser("sim").build();

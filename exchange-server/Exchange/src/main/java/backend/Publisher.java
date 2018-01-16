@@ -1,12 +1,11 @@
 package backend;
 
-import data.OrderOuterClass;
+import data.protobuf.OrderOuterClass;
 import org.zeromq.ZMQ;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Publisher extends Thread{

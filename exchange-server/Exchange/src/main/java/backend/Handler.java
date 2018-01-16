@@ -1,22 +1,28 @@
 package backend;
 
-import data.Database;
+import data.Company;
 import data.OrderOuterClass.Order;
 import data.OrderResponseOuterClass.OrderResponse;
+import rest.RESTClient;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Map;
 
 public class Handler extends Thread{
 
     private Socket socket;
-    private Database db;
     private Publisher publisher;
+    private Map<String, Company> companies;
 
-    public Handler(Socket socket, Database db, Publisher publisher) {
+    public Handler(Socket socket, Publisher publisher) {
         this.socket = socket;
-        this.db = db;
         this.publisher = publisher;
+        RESTClient rest = new RESTClient();
+
+        companies.put("MERDA", new Company(publisher, rest));
+        companies.put("FEZES", new Company(publisher, rest));
+
     }
 
     @Override
@@ -27,7 +33,7 @@ public class Handler extends Thread{
             Order o = Order.parseFrom(socket.getInputStream());
             System.out.println("Received probuf message: \n" + o);
 
-            db.getMatch(o);
+            companies.get(o.getSymbol()).getMatch(o);
 
             OrderResponse response = OrderResponse.newBuilder().setConfirmation(true).build();
             response.writeTo(socket.getOutputStream());

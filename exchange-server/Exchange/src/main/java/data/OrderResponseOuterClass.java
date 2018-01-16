@@ -296,7 +296,7 @@ public final class OrderResponseOuterClass {
                 OrderResponse.class, Builder.class);
       }
 
-      // Construct using data.OrderResponseOuterClass.OrderResponse.newBuilder()
+      // Construct using data.protobuf.OrderResponseOuterClass.OrderResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }

@@ -170,14 +170,14 @@ public final class OrderOuterClass {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return data.OrderOuterClass.internal_static_order_Order_descriptor;
+      return OrderOuterClass.internal_static_order_Order_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return data.OrderOuterClass.internal_static_order_Order_fieldAccessorTable
+      return OrderOuterClass.internal_static_order_Order_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              data.OrderOuterClass.Order.class, data.OrderOuterClass.Order.Builder.class);
+              OrderOuterClass.Order.class, OrderOuterClass.Order.Builder.class);
     }
 
     private int bitField0_;
@@ -401,10 +401,10 @@ public final class OrderOuterClass {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof data.OrderOuterClass.Order)) {
+      if (!(obj instanceof OrderOuterClass.Order)) {
         return super.equals(obj);
       }
-      data.OrderOuterClass.Order other = (data.OrderOuterClass.Order) obj;
+      OrderOuterClass.Order other = (OrderOuterClass.Order) obj;
 
       boolean result = true;
       result = result && (hasOrderType() == other.hasOrderType());
@@ -472,69 +472,69 @@ public final class OrderOuterClass {
       return hash;
     }
 
-    public static data.OrderOuterClass.Order parseFrom(
+    public static OrderOuterClass.Order parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static data.OrderOuterClass.Order parseFrom(
+    public static OrderOuterClass.Order parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static data.OrderOuterClass.Order parseFrom(
+    public static OrderOuterClass.Order parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static data.OrderOuterClass.Order parseFrom(
+    public static OrderOuterClass.Order parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static data.OrderOuterClass.Order parseFrom(byte[] data)
+    public static OrderOuterClass.Order parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static data.OrderOuterClass.Order parseFrom(
+    public static OrderOuterClass.Order parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static data.OrderOuterClass.Order parseFrom(java.io.InputStream input)
+    public static OrderOuterClass.Order parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static data.OrderOuterClass.Order parseFrom(
+    public static OrderOuterClass.Order parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static data.OrderOuterClass.Order parseDelimitedFrom(java.io.InputStream input)
+    public static OrderOuterClass.Order parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static data.OrderOuterClass.Order parseDelimitedFrom(
+    public static OrderOuterClass.Order parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static data.OrderOuterClass.Order parseFrom(
+    public static OrderOuterClass.Order parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static data.OrderOuterClass.Order parseFrom(
+    public static OrderOuterClass.Order parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -546,7 +546,7 @@ public final class OrderOuterClass {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(data.OrderOuterClass.Order prototype) {
+    public static Builder newBuilder(OrderOuterClass.Order prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -566,20 +566,20 @@ public final class OrderOuterClass {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:order.Order)
-        data.OrderOuterClass.OrderOrBuilder {
+        OrderOuterClass.OrderOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return data.OrderOuterClass.internal_static_order_Order_descriptor;
+        return OrderOuterClass.internal_static_order_Order_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return data.OrderOuterClass.internal_static_order_Order_fieldAccessorTable
+        return OrderOuterClass.internal_static_order_Order_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                data.OrderOuterClass.Order.class, data.OrderOuterClass.Order.Builder.class);
+                OrderOuterClass.Order.class, OrderOuterClass.Order.Builder.class);
       }
 
-      // Construct using data.OrderOuterClass.Order.newBuilder()
+      // Construct using data.protobuf.OrderOuterClass.Order.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -611,23 +611,23 @@ public final class OrderOuterClass {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return data.OrderOuterClass.internal_static_order_Order_descriptor;
+        return OrderOuterClass.internal_static_order_Order_descriptor;
       }
 
-      public data.OrderOuterClass.Order getDefaultInstanceForType() {
-        return data.OrderOuterClass.Order.getDefaultInstance();
+      public OrderOuterClass.Order getDefaultInstanceForType() {
+        return OrderOuterClass.Order.getDefaultInstance();
       }
 
-      public data.OrderOuterClass.Order build() {
-        data.OrderOuterClass.Order result = buildPartial();
+      public OrderOuterClass.Order build() {
+        OrderOuterClass.Order result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public data.OrderOuterClass.Order buildPartial() {
-        data.OrderOuterClass.Order result = new data.OrderOuterClass.Order(this);
+      public OrderOuterClass.Order buildPartial() {
+        OrderOuterClass.Order result = new OrderOuterClass.Order(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -682,16 +682,16 @@ public final class OrderOuterClass {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof data.OrderOuterClass.Order) {
-          return mergeFrom((data.OrderOuterClass.Order)other);
+        if (other instanceof OrderOuterClass.Order) {
+          return mergeFrom((OrderOuterClass.Order)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(data.OrderOuterClass.Order other) {
-        if (other == data.OrderOuterClass.Order.getDefaultInstance()) return this;
+      public Builder mergeFrom(OrderOuterClass.Order other) {
+        if (other == OrderOuterClass.Order.getDefaultInstance()) return this;
         if (other.hasOrderType()) {
           setOrderType(other.getOrderType());
         }
@@ -739,11 +739,11 @@ public final class OrderOuterClass {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        data.OrderOuterClass.Order parsedMessage = null;
+        OrderOuterClass.Order parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (data.OrderOuterClass.Order) e.getUnfinishedMessage();
+          parsedMessage = (OrderOuterClass.Order) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1032,12 +1032,12 @@ public final class OrderOuterClass {
     }
 
     // @@protoc_insertion_point(class_scope:order.Order)
-    private static final data.OrderOuterClass.Order DEFAULT_INSTANCE;
+    private static final OrderOuterClass.Order DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new data.OrderOuterClass.Order();
+      DEFAULT_INSTANCE = new OrderOuterClass.Order();
     }
 
-    public static data.OrderOuterClass.Order getDefaultInstance() {
+    public static OrderOuterClass.Order getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1060,7 +1060,7 @@ public final class OrderOuterClass {
       return PARSER;
     }
 
-    public data.OrderOuterClass.Order getDefaultInstanceForType() {
+    public OrderOuterClass.Order getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
