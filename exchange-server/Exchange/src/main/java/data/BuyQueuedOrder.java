@@ -1,7 +1,7 @@
 package data;
 
 import backend.Publisher;
-import data.protobuf.OrderOuterClass.Order;
+import data.OrderOuterClass.Order;
 
 public class BuyQueuedOrder extends QueuedOrder {
 

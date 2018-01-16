@@ -10,18 +10,18 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
 
-        Socket socket = new Socket("localhost",3000);
+        Socket socket = new Socket("localhost",3001);
 
         Order o = Order.newBuilder()
-                .setOrderType(true)
+                .setOrderType(false)
                 .setSymbol("MERDA")
                 .setQuantity(123)
-                .setPrice(69)
+                .setPrice(55)
                 .setUser("sim").build();
 
-        o.writeTo(socket.getOutputStream());
+        o.writeDelimitedTo(socket.getOutputStream());
 
-        OrderResponse or = OrderResponse.parseFrom(socket.getInputStream());
+        OrderResponse or = OrderResponse.parseDelimitedFrom(socket.getInputStream());
         System.out.println(or);
     }
 }

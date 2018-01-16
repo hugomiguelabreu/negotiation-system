@@ -1,12 +1,13 @@
 package backend;
 
-import data.Database;
+import data.Company;
 import rest.RESTClient;
 import rest.core.Exchange;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class Listener {
 
@@ -25,14 +26,17 @@ public class Listener {
         Publisher publisher = new Publisher();
         publisher.start();
 
-        Database db = new Database(publisher);
+        HashMap<String,Company> companies = new HashMap<>();
+        RESTClient rest = new RESTClient();
+        companies.put("MERDA", new Company(publisher, rest));
+        companies.put("FEZES", new Company(publisher, rest));
 
         boolean submited = false;
 
         while (true) { // TODO: introduzir horas
             while (true) {
                 Socket socket = svSocket.accept();
-                (new Handler(socket, db, publisher)).start();
+                (new Handler(socket, publisher, companies)).start();
             }
         }
 

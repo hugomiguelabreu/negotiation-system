@@ -1,9 +1,7 @@
 package data;
 
 import backend.Publisher;
-import data.protobuf.OrderOuterClass;
-
-import static data.protobuf.OrderOuterClass.Order;
+import data.OrderOuterClass.Order;
 
 public class SellQueuedOrder extends QueuedOrder{
 
@@ -34,7 +32,7 @@ public class SellQueuedOrder extends QueuedOrder{
     }
 
     @Override
-    public int match(OrderOuterClass.Order order) {
+    public int match(Order order, PriceStats priceStats) {
 
         int quantity_sold;
 
@@ -51,6 +49,8 @@ public class SellQueuedOrder extends QueuedOrder{
         }
 
         sendNotification(quantity_sold, order);
+        priceStats.checkValue((price + order.getPrice())/2);
+
         return quantity_sold;
     }
 }

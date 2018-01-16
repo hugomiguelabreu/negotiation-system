@@ -15,13 +15,10 @@ public class Handler extends Thread{
     private Publisher publisher;
     private Map<String, Company> companies;
 
-    public Handler(Socket socket, Publisher publisher) {
+    public Handler(Socket socket, Publisher publisher, Map<String, Company> companies) {
         this.socket = socket;
         this.publisher = publisher;
-        RESTClient rest = new RESTClient();
-
-        companies.put("MERDA", new Company(publisher, rest));
-        companies.put("FEZES", new Company(publisher, rest));
+        this.companies = companies;
 
     }
 
@@ -30,13 +27,13 @@ public class Handler extends Thread{
         try {
             System.out.println("New connection!");
 
-            Order o = Order.parseFrom(socket.getInputStream());
+            Order o = Order.parseDelimitedFrom(socket.getInputStream());
             System.out.println("Received probuf message: \n" + o);
 
             companies.get(o.getSymbol()).getMatch(o);
 
             OrderResponse response = OrderResponse.newBuilder().setConfirmation(true).build();
-            response.writeTo(socket.getOutputStream());
+            response.writeDelimitedTo(socket.getOutputStream());
 
         } catch (IOException e) {
             e.printStackTrace();

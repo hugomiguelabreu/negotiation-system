@@ -1,6 +1,6 @@
 package backend;
 
-import data.protobuf.OrderOuterClass;
+import data.OrderOuterClass.Order;
 import org.zeromq.ZMQ;
 
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class Publisher extends Thread{
     }
 
     //TODO: REVERIFICAR A PORTA DE RESPOSTA
-    public static void notifyUser(OrderOuterClass.Order o) {
+    public static void notifyUser(Order o) {
         try {
             Socket s = new Socket("localhost", 3002);
             o.writeTo(s.getOutputStream());
