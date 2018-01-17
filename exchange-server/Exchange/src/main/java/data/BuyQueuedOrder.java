@@ -11,7 +11,7 @@ public class BuyQueuedOrder extends QueuedOrder {
 
     private void sendNotification(int sold, Order order){
         StringBuilder sb = new StringBuilder();
-        sb.append("User ").append(user).append(" sold ").append(sold).append(" of ").append(symbol).append(".");
+        sb.append("X_User ").append(order.getUser()).append(" sold ").append(sold).append(" of ").append(symbol).append(" to ").append(user);
         publisher.sendNotification(sb.toString());
 
         Order o = Order.newBuilder()
@@ -35,7 +35,7 @@ public class BuyQueuedOrder extends QueuedOrder {
         int quantity_sold;
 
         // Verifica se o preço de venda é maior que de compra. Se for, não se efetua.
-        if (order.getPrice() > this.price || this.quantity == 0)
+        if (order.getPrice() > this.price)
             return 0;
 
         if (order.getQuantity() > this.quantity){

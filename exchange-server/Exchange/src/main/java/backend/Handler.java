@@ -25,7 +25,7 @@ public class Handler extends Thread{
     @Override
     public void run() {
         try {
-            System.out.println("New connection!");
+           System.out.println("\u001B[32m" + "New connection!");
 
             Order o = Order.parseDelimitedFrom(socket.getInputStream());
             System.out.println("Received probuf message: \n" + o);

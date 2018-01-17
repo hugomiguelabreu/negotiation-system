@@ -18,22 +18,24 @@ public class Publisher extends Thread{
         toSend = new LinkedBlockingQueue<>();
         context = ZMQ.context(1);
         socket = context.socket(ZMQ.PUB);
-        socket.bind("tcp://*:3002");
-    }
+            socket.bind("tcp://*:3002");
+        }
 
-    public void sendNotification(String txt){
-        toSend.add(txt);
-    }
+        public void sendNotification(String txt){
+            System.out.println("recebi para colocar: " + txt);
+            toSend.add(txt);
+        }
 
-    @Override
-    public void run() {
-        while(true){
+        @Override
+        public void run() {
             String send = null;
-            try {
-                send = toSend.take();
-            } catch (InterruptedException e) {
+            while(true){
+                try {
+                    send = toSend.take();
+                } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            System.out.println(send);
             socket.send(send.getBytes());
         }
     }

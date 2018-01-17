@@ -35,6 +35,16 @@ public class RESTClient {
         return response.readEntity(Company.class);
     }
 
+    public Company[] getCompanyNames(String type){
+
+        webTarget = client.target("http://localhost:8080").path("exchange/"+type+"/companies");
+        invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+        response = invocationBuilder.get();
+        Company[] cs = response.readEntity(Company[].class);
+
+        return cs;
+    }
+
     public Company[] getCompanies(){
         webTarget = client.target("http://localhost:8080").path("companies");
         invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
