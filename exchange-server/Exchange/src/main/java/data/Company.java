@@ -26,7 +26,7 @@ public class Company {
 
         Queue<QueuedOrder> orders;
 
-        if (o.getOrderType())
+        if (o.getType())
             orders = sellQueue;
         else
             orders = buyQueue;
@@ -51,7 +51,7 @@ public class Company {
             if (new_qty > 0) {
                 System.out.println("Not enough quantity sold - Adding to Queue. Quantity: " + new_qty);
 
-                if (o.getOrderType())
+                if (o.getType())
                     buyQueue.add(QueuedOrder.create(o, new_qty, publisher));
                 else
                     sellQueue.add(QueuedOrder.create(o, new_qty, publisher));

@@ -21,7 +21,7 @@ public abstract class QueuedOrder {
     }
 
     public static QueuedOrder create(Order o, int quantity, Publisher publisher){
-        if (o.getOrderType())
+        if (o.getType())
             return new BuyQueuedOrder(o.getUser(),o.getSymbol(),quantity,o.getPrice(), publisher);
         else
             return new SellQueuedOrder(o.getUser(),o.getSymbol(),quantity,o.getPrice(), publisher);

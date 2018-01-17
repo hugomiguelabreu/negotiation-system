@@ -2,8 +2,6 @@ package backend;
 
 import data.Company;
 import data.OrderOuterClass.Order;
-import data.OrderResponseOuterClass.OrderResponse;
-import rest.RESTClient;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -32,7 +30,7 @@ public class Handler extends Thread{
 
             companies.get(o.getSymbol()).getMatch(o);
 
-            OrderResponse response = OrderResponse.newBuilder().setConfirmation(true).build();
+            Order response = Order.newBuilder().setConfirmation(true).setType(true).build();
             response.writeDelimitedTo(socket.getOutputStream());
 
         } catch (IOException e) {

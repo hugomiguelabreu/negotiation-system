@@ -14,7 +14,8 @@ public class Client {
         (new Thread(new NotificationReceiver())).start();
 
         Order o = Order.newBuilder()
-                .setOrderType(false)
+                .setConfirmation(false)
+                .setType(false)
                 .setSymbol("MERDA")
                 .setQuantity(123)
                 .setPrice(55)
@@ -22,7 +23,7 @@ public class Client {
 
         o.writeDelimitedTo(socket.getOutputStream());
 
-        OrderResponse or = OrderResponse.parseDelimitedFrom(socket.getInputStream());
+        Order or = Order.parseDelimitedFrom(socket.getInputStream());
         System.out.println(or);
     }
 }

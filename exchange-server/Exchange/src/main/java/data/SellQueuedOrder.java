@@ -17,7 +17,8 @@ public class SellQueuedOrder extends QueuedOrder{
         publisher.sendNotification(sb.toString());
 
         OrderOuterClass.Order o = OrderOuterClass.Order.newBuilder()
-                .setOrderType(false)
+                .setConfirmation(false)
+                .setType(false)
                 .setQuantity(sold)
                 .setSymbol(symbol)
                 .setPrice((price + order.getPrice())/2)
@@ -25,7 +26,7 @@ public class SellQueuedOrder extends QueuedOrder{
         Publisher.notifyUser(o);
 
         o.toBuilder()
-                .setOrderType(true)
+                .setType(true)
                 .setUser(order.getUser()).build();
         Publisher.notifyUser(o);
 
