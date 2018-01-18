@@ -13,7 +13,7 @@ public class SellQueuedOrder extends QueuedOrder{
     private void sendNotification(int sold, Order order){
 
         StringBuilder sb = new StringBuilder();
-        sb.append("X_MERDA User ").append(user).append(" sold ").append(sold).append(" of ").append(symbol).append(" to ").append(order.getUser());
+        sb.append(symbol).append("_User ").append(user).append(" sold ").append(sold).append(" of ").append(symbol).append(" to ").append(order.getUser());
         publisher.sendNotification(sb.toString());
 
         OrderOuterClass.Order o = OrderOuterClass.Order.newBuilder()

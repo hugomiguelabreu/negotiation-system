@@ -22,7 +22,6 @@ public class Publisher extends Thread{
         }
 
         public void sendNotification(String txt){
-            System.out.println("recebi para colocar: " + txt);
             toSend.add(txt);
         }
 
@@ -35,7 +34,6 @@ public class Publisher extends Thread{
                 } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println(send);
             socket.send(send.getBytes());
         }
     }
