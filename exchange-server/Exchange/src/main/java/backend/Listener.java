@@ -5,6 +5,7 @@ import data.Company;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalTime;
 import java.util.HashMap;
 
 public class Listener {
@@ -35,15 +36,9 @@ public class Listener {
         companies.put("MERDA", new Company(publisher, rest));
         companies.put("FEZES", new Company(publisher, rest));
 
-        boolean submited = false;
-
-        while (true) { // TODO: introduzir horas
-            while (true) {
-                Socket socket = svSocket.accept();
-                (new Handler(socket, publisher, companies)).start();
-            }
+        while (true) {
+            Socket socket = svSocket.accept();
+            (new Handler(socket, companies)).start();
         }
-
-
     }
 }

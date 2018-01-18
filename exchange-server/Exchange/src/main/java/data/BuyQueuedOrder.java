@@ -14,7 +14,7 @@ public class BuyQueuedOrder extends QueuedOrder {
         sb.append("X_User ").append(order.getUser()).append(" sold ").append(sold).append(" of ").append(symbol).append(" to ").append(user);
         publisher.sendNotification(sb.toString());
 
-        Order o = Order.newBuilder()    
+        Order o = Order.newBuilder()
                 .setConfirmation(false)
                 .setType(true)
                 .setQuantity(sold)
