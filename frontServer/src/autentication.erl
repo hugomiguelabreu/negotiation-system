@@ -14,6 +14,7 @@
 % login -> false
 
 startAutentication() ->
+	io:format("start Autentication\n"),
 	login_manager:start(), %da start ao manager
 	{ok, LSock} = gen_tcp:listen(2000, [binary, {nodelay, true}, {reuseaddr, true}]),
 	acceptor(LSock).

@@ -7,6 +7,8 @@
 
 %% Imports
 -include ("autentication.hrl").
+-include ("db.hrl").
+-include ("getJson.hrl").
 
 %% Application callbacks
 -export([start/0, stop/1]).
@@ -15,19 +17,11 @@
 %% API
 %%====================================================================
 
-    % mnesia:create_table(painting,
-    %     [ {disc_copies, [node()] },
-    %          {attributes,      
-    %             record_info(fields,painting)} ]).
-
-
-%%====================================================================
-%% TODO : MNESIA pq sim
-%%====================================================================
-
-
 start() ->
-	spawn(autentication, startAutentication, []).
+	spawn(db, init, []),
+	spawn(autentication, startAutentication, []),
+	spawn(getJson, start, []),
+	spawn(orders, init, []).
     %frontServer_sup:start_link().
 
 %%--------------------------------------------------------------------

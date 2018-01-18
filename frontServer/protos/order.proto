@@ -1,13 +1,15 @@
-syntax = "proto2";
+syntax = "proto3";
+
 package order;
+
 option java_package = "data";
 
 message Order {
 
 	//true -> BUY false -> SELL
-	required bool orderType = 1;
-	required string symbol = 2;
-	required int32 quantity = 3;
-	required double price = 4;
-	required string user = 5;
+	int32 quantity = 1;
+	float price = 2;
+	string user = 3;
+	string symbol = 4;
+	bool orderType = 5;
 }

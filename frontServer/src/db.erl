@@ -11,13 +11,15 @@
 %%====================================================================
 
 start() ->
-	mnesia:wait_for_tables([users, cache], 5000).
+	mnesia:wait_for_tables([users, cache], 5000),
+	io:format("db started\n").
 
 init() ->
 	mnesia:create_schema([node()]),
 	mnesia:start(),
 	mnesia:create_table(cache, [{attributes, record_info(fields, cache)}, {ram_copies, [node()]}]),
-	mnesia:create_table(users, [{attributes, record_info(fields, users)}, {disc_copies, [node()]}]).
+	mnesia:create_table(users, [{attributes, record_info(fields, users)}, {disc_copies, [node()]}]),
+	start().
 
 stop() ->
 	mnesia:stop().
@@ -74,16 +76,18 @@ insert_cache(Id, Address) ->
 		mnesia:write(#cache{id = Id,
 							address = Address})
 	end,
-	mnesia:activity(transaction, F).
+	mnesia:activity(transaction, F),
+	io:format("inserted cenas na cache\n").
 
 select_cache(Id) ->
 	F = fun() ->
 		case mnesia:read({cache, Id}) of
 			[#cache{address = Add}] ->
 				io:format("cache HIT\n"),
-				Add;
+				{ok, Add};
 			[] ->
-				io:format("cache Miss\n")
+				io:format("cache Miss\n"),
+				undefined
 		end
 	end,
 	mnesia:activity(transaction, F).
