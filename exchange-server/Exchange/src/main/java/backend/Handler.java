@@ -22,23 +22,24 @@ public class Handler extends Thread{
     @Override
     public void run() {
         try {
-            System.out.println("\u001B[32m" + "New connection!\u001B[0m");
+            System.out.println("\n\u001B[32m" + "[+] New connection!\u001B[0m");
 
             LocalTime open = LocalTime.parse("09:00:00");
-            LocalTime close = LocalTime.parse("17:00:00");
+            LocalTime close = LocalTime.parse("23:00:00");
 
             Order o = Order.parseDelimitedFrom(socket.getInputStream());
-            System.out.println("Received probuf message: \n" + o);
+            System.out.print("Received probuf message: \n" + "\u001B[34m" + o + "\u001B[0m");
 
             if (!LocalTime.now().isAfter(open) || !LocalTime.now().isBefore(close)) {
-                System.out.println("Market closed.");
                 Order response = Order.newBuilder(o).setConfirmation(true).setType(false).build();
                 response.writeDelimitedTo(socket.getOutputStream());
+                System.out.println("\u001B[41m" + "[ERROR]" + "\u001B[0m" + " Market closed. Negative confirmation sent.");
                 return;
             }
 
             Order response = Order.newBuilder(o).setConfirmation(true).setType(true).build();
             response.writeDelimitedTo(socket.getOutputStream());
+            System.out.println("\u001B[42m" + "[SUCCESS]" + "\u001B[0m" + " Positive confirmation sent.");
 
             companies.get(o.getSymbol()).getMatch(o);
 

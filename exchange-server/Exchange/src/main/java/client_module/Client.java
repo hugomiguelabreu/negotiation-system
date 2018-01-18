@@ -39,8 +39,8 @@ public class Client {
         Order o = Order.newBuilder()
                 .setConfirmation(false)
                 .setType(true)
-                .setSymbol("Amazon")
-                .setQuantity(123)
+                .setSymbol("AMZ")
+                .setQuantity(10)
                 .setPrice(55)
                 .setUser("joao").build();
 
