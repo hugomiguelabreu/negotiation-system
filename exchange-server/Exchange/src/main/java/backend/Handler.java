@@ -3,6 +3,7 @@ package backend;
 import data.Company;
 import data.OrderOuterClass.Order;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalTime;
@@ -32,13 +33,27 @@ public class Handler extends Thread{
 
             if (!LocalTime.now().isAfter(open) || !LocalTime.now().isBefore(close)) {
                 Order response = Order.newBuilder(o).setConfirmation(true).setType(false).build();
-                response.writeDelimitedTo(socket.getOutputStream());
+
+                socket = new Socket("localhost", 3001);
+
+                DataOutputStream out= new DataOutputStream(socket.getOutputStream());
+                out.write(o.getSerializedSize());
+                o.writeTo(socket.getOutputStream()); // escreve no socket o tamanho do pacote pq erlang
+
+                response.writeTo(socket.getOutputStream());
                 System.out.println("\u001B[41m" + "[ERROR]" + "\u001B[0m" + " Market closed. Negative confirmation sent.");
                 return;
             }
 
             Order response = Order.newBuilder(o).setConfirmation(true).setType(true).build();
-            response.writeDelimitedTo(socket.getOutputStream());
+
+            socket = new Socket("localhost", 3001);
+
+            DataOutputStream out= new DataOutputStream(socket.getOutputStream());
+            out.write(o.getSerializedSize());
+            o.writeTo(socket.getOutputStream()); // escreve no socket o tamanho do pacote pq erlang
+
+            response.writeTo(socket.getOutputStream());
             System.out.println("\u001B[42m" + "[SUCCESS]" + "\u001B[0m" + " Positive confirmation sent.");
 
             companies.get(o.getSymbol()).getMatch(o);

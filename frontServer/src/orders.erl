@@ -42,9 +42,11 @@ forwarder_from_client(Socket) ->
 			Symbol = Ret#'Order'.symbol,
 			case db:select_cache(Symbol) of
 				{ok, Addr} -> 
+					io:format("ta na cache\n"),
 					List = binary:bin_to_list(Addr),
 					send_to_exchange(Data, List);
 				undefined ->
+					io:format("nao ta na cache\n"),
 					Naddr = getJson:getCompany(Symbol),
 					ListU = binary:bin_to_list(Naddr),
 					send_to_exchange(Data, ListU)

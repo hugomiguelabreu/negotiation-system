@@ -53,7 +53,7 @@ public class Client {
 
         System.out.println("size = " + size);
 
-        Order or = Order.parseDelimitedFrom(socket.getInputStream());
+        Order or = Order.parseFrom(socket.getInputStream());
 
         System.out.println(or);
     }

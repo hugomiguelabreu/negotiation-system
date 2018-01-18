@@ -19,9 +19,15 @@ public class PriceStats {
     }
 
     public void checkValue(double value){
-        if (checkOpen(value) || checkMin(value)|| checkMax(value))
+
+        boolean o = checkOpen(value);
+        boolean m = checkMin(value);
+        boolean mx = checkMax(value);
+
+        if (m || o || mx) {
             System.out.println("Value changes detected! Sending to REST Server.");
-            rest.setPrice(company, new PriceInfo(min,max,open,close));
+            rest.setPrice(company, new PriceInfo(min, max, open, close));
+        }
     }
 
     private boolean checkMax(double value) {
