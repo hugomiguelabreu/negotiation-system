@@ -10,11 +10,12 @@
 -ifndef('ORDER_PB_H').
 -define('ORDER_PB_H', true).
 -record('Order',
-        {quantity = 0           :: integer() | undefined, % = 1, 32 bits
-         price = 0.0            :: float() | integer() | infinity | '-infinity' | nan | undefined, % = 2
-         user = <<>>            :: iodata() | undefined, % = 3
-         symbol = <<>>          :: iodata() | undefined, % = 4
-         orderType = false      :: boolean() | 0 | 1 | undefined % = 5
+        {confirmation = false   :: boolean() | 0 | 1, % = 1
+         type = false           :: boolean() | 0 | 1, % = 2
+         symbol = <<>>          :: iodata(),        % = 3
+         quantity = 0           :: integer(),       % = 4, 32 bits
+         price = 0.0            :: float() | integer() | infinity | '-infinity' | nan, % = 5
+         user = <<>>            :: iodata()         % = 6
         }).
 -endif.
 

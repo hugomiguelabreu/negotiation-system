@@ -54,55 +54,32 @@ e_msg_Order(Msg, TrUserData) ->
     e_msg_Order(Msg, <<>>, TrUserData).
 
 
-e_msg_Order(#'Order'{quantity = F1, price = F2,
-		     user = F3, symbol = F4, orderType = F5},
+e_msg_Order(#'Order'{confirmation = F1, type = F2,
+		     symbol = F3, quantity = F4, price = F5, user = F6},
 	    Bin, TrUserData) ->
-    B1 = if F1 == undefined -> Bin;
-	    true ->
-		begin
-		  TrF1 = id(F1, TrUserData),
-		  if TrF1 =:= 0 -> Bin;
-		     true -> e_type_int32(TrF1, <<Bin/binary, 8>>)
-		  end
-		end
+    B1 = begin
+	   TrF1 = id(F1, TrUserData),
+	   e_type_bool(TrF1, <<Bin/binary, 8>>)
 	 end,
-    B2 = if F2 == undefined -> B1;
-	    true ->
-		begin
-		  TrF2 = id(F2, TrUserData),
-		  if TrF2 =:= 0.0 -> B1;
-		     true -> e_type_float(TrF2, <<B1/binary, 21>>)
-		  end
-		end
+    B2 = begin
+	   TrF2 = id(F2, TrUserData),
+	   e_type_bool(TrF2, <<B1/binary, 16>>)
 	 end,
-    B3 = if F3 == undefined -> B2;
-	    true ->
-		begin
-		  TrF3 = id(F3, TrUserData),
-		  case is_empty_string(TrF3) of
-		    true -> B2;
-		    false -> e_type_string(TrF3, <<B2/binary, 26>>)
-		  end
-		end
+    B3 = begin
+	   TrF3 = id(F3, TrUserData),
+	   e_type_string(TrF3, <<B2/binary, 26>>)
 	 end,
-    B4 = if F4 == undefined -> B3;
-	    true ->
-		begin
-		  TrF4 = id(F4, TrUserData),
-		  case is_empty_string(TrF4) of
-		    true -> B3;
-		    false -> e_type_string(TrF4, <<B3/binary, 34>>)
-		  end
-		end
+    B4 = begin
+	   TrF4 = id(F4, TrUserData),
+	   e_type_int32(TrF4, <<B3/binary, 32>>)
 	 end,
-    if F5 == undefined -> B4;
-       true ->
-	   begin
-	     TrF5 = id(F5, TrUserData),
-	     if TrF5 =:= false -> B4;
-		true -> e_type_bool(TrF5, <<B4/binary, 40>>)
-	     end
-	   end
+    B5 = begin
+	   TrF5 = id(F5, TrUserData),
+	   e_type_double(TrF5, <<B4/binary, 41>>)
+	 end,
+    begin
+      TrF6 = id(F6, TrUserData),
+      e_type_string(TrF6, <<B5/binary, 50>>)
     end.
 
 e_type_int32(Value, Bin)
@@ -122,38 +99,19 @@ e_type_string(S, Bin) ->
     Bin2 = e_varint(byte_size(Utf8), Bin),
     <<Bin2/binary, Utf8/binary>>.
 
-e_type_float(V, Bin) when is_number(V) ->
-    <<Bin/binary, V:32/little-float>>;
-e_type_float(infinity, Bin) ->
-    <<Bin/binary, 0:16, 128, 127>>;
-e_type_float('-infinity', Bin) ->
-    <<Bin/binary, 0:16, 128, 255>>;
-e_type_float(nan, Bin) ->
-    <<Bin/binary, 0:16, 192, 127>>.
+e_type_double(V, Bin) when is_number(V) ->
+    <<Bin/binary, V:64/little-float>>;
+e_type_double(infinity, Bin) ->
+    <<Bin/binary, 0:48, 240, 127>>;
+e_type_double('-infinity', Bin) ->
+    <<Bin/binary, 0:48, 240, 255>>;
+e_type_double(nan, Bin) ->
+    <<Bin/binary, 0:48, 248, 127>>.
 
 e_varint(N, Bin) when N =< 127 -> <<Bin/binary, N>>;
 e_varint(N, Bin) ->
     Bin2 = <<Bin/binary, (N band 127 bor 128)>>,
     e_varint(N bsr 7, Bin2).
-
-is_empty_string("") -> true;
-is_empty_string(<<>>) -> true;
-is_empty_string(L) when is_list(L) ->
-    not string_has_chars(L);
-is_empty_string(B) when is_binary(B) -> false.
-
-string_has_chars([C | _]) when is_integer(C) -> true;
-string_has_chars([H | T]) ->
-    case string_has_chars(H) of
-      true -> true;
-      false -> string_has_chars(T)
-    end;
-string_has_chars(B)
-    when is_binary(B), byte_size(B) =/= 0 ->
-    true;
-string_has_chars(C) when is_integer(C) -> true;
-string_has_chars(<<>>) -> false;
-string_has_chars([]) -> false.
 
 
 decode_msg(Bin, MsgName) when is_binary(Bin) ->
@@ -175,200 +133,225 @@ decode_msg(Bin, MsgName, Opts) when is_binary(Bin) ->
 
 
 d_msg_Order(Bin, TrUserData) ->
-    dfp_read_field_def_Order(Bin, 0, 0, id(0, TrUserData),
-			     id(0.0, TrUserData), id(<<>>, TrUserData),
-			     id(<<>>, TrUserData), id(false, TrUserData),
-			     TrUserData).
+    dfp_read_field_def_Order(Bin, 0, 0,
+			     id(undefined, TrUserData),
+			     id(undefined, TrUserData),
+			     id(undefined, TrUserData),
+			     id(undefined, TrUserData),
+			     id(undefined, TrUserData),
+			     id(undefined, TrUserData), TrUserData).
 
 dfp_read_field_def_Order(<<8, Rest/binary>>, Z1, Z2,
-			 F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
-    d_field_Order_quantity(Rest, Z1, Z2, F@_1, F@_2, F@_3,
-			   F@_4, F@_5, TrUserData);
-dfp_read_field_def_Order(<<21, Rest/binary>>, Z1, Z2,
-			 F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
-    d_field_Order_price(Rest, Z1, Z2, F@_1, F@_2, F@_3,
-			F@_4, F@_5, TrUserData);
+			 F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData) ->
+    d_field_Order_confirmation(Rest, Z1, Z2, F@_1, F@_2,
+			       F@_3, F@_4, F@_5, F@_6, TrUserData);
+dfp_read_field_def_Order(<<16, Rest/binary>>, Z1, Z2,
+			 F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData) ->
+    d_field_Order_type(Rest, Z1, Z2, F@_1, F@_2, F@_3, F@_4,
+		       F@_5, F@_6, TrUserData);
 dfp_read_field_def_Order(<<26, Rest/binary>>, Z1, Z2,
-			 F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
-    d_field_Order_user(Rest, Z1, Z2, F@_1, F@_2, F@_3, F@_4,
-		       F@_5, TrUserData);
-dfp_read_field_def_Order(<<34, Rest/binary>>, Z1, Z2,
-			 F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
+			 F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData) ->
     d_field_Order_symbol(Rest, Z1, Z2, F@_1, F@_2, F@_3,
-			 F@_4, F@_5, TrUserData);
-dfp_read_field_def_Order(<<40, Rest/binary>>, Z1, Z2,
-			 F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
-    d_field_Order_orderType(Rest, Z1, Z2, F@_1, F@_2, F@_3,
-			    F@_4, F@_5, TrUserData);
+			 F@_4, F@_5, F@_6, TrUserData);
+dfp_read_field_def_Order(<<32, Rest/binary>>, Z1, Z2,
+			 F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData) ->
+    d_field_Order_quantity(Rest, Z1, Z2, F@_1, F@_2, F@_3,
+			   F@_4, F@_5, F@_6, TrUserData);
+dfp_read_field_def_Order(<<41, Rest/binary>>, Z1, Z2,
+			 F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData) ->
+    d_field_Order_price(Rest, Z1, Z2, F@_1, F@_2, F@_3,
+			F@_4, F@_5, F@_6, TrUserData);
+dfp_read_field_def_Order(<<50, Rest/binary>>, Z1, Z2,
+			 F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData) ->
+    d_field_Order_user(Rest, Z1, Z2, F@_1, F@_2, F@_3, F@_4,
+		       F@_5, F@_6, TrUserData);
 dfp_read_field_def_Order(<<>>, 0, 0, F@_1, F@_2, F@_3,
-			 F@_4, F@_5, _) ->
-    #'Order'{quantity = F@_1, price = F@_2, user = F@_3,
-	     symbol = F@_4, orderType = F@_5};
+			 F@_4, F@_5, F@_6, _) ->
+    #'Order'{confirmation = F@_1, type = F@_2,
+	     symbol = F@_3, quantity = F@_4, price = F@_5,
+	     user = F@_6};
 dfp_read_field_def_Order(Other, Z1, Z2, F@_1, F@_2,
-			 F@_3, F@_4, F@_5, TrUserData) ->
+			 F@_3, F@_4, F@_5, F@_6, TrUserData) ->
     dg_read_field_def_Order(Other, Z1, Z2, F@_1, F@_2, F@_3,
-			    F@_4, F@_5, TrUserData).
+			    F@_4, F@_5, F@_6, TrUserData).
 
 dg_read_field_def_Order(<<1:1, X:7, Rest/binary>>, N,
-			Acc, F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData)
+			Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData)
     when N < 32 - 7 ->
     dg_read_field_def_Order(Rest, N + 7, X bsl N + Acc,
-			    F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData);
+			    F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData);
 dg_read_field_def_Order(<<0:1, X:7, Rest/binary>>, N,
-			Acc, F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
+			Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData) ->
     Key = X bsl N + Acc,
     case Key of
       8 ->
-	  d_field_Order_quantity(Rest, 0, 0, F@_1, F@_2, F@_3,
-				 F@_4, F@_5, TrUserData);
-      21 ->
-	  d_field_Order_price(Rest, 0, 0, F@_1, F@_2, F@_3, F@_4,
-			      F@_5, TrUserData);
+	  d_field_Order_confirmation(Rest, 0, 0, F@_1, F@_2, F@_3,
+				     F@_4, F@_5, F@_6, TrUserData);
+      16 ->
+	  d_field_Order_type(Rest, 0, 0, F@_1, F@_2, F@_3, F@_4,
+			     F@_5, F@_6, TrUserData);
       26 ->
-	  d_field_Order_user(Rest, 0, 0, F@_1, F@_2, F@_3, F@_4,
-			     F@_5, TrUserData);
-      34 ->
 	  d_field_Order_symbol(Rest, 0, 0, F@_1, F@_2, F@_3, F@_4,
-			       F@_5, TrUserData);
-      40 ->
-	  d_field_Order_orderType(Rest, 0, 0, F@_1, F@_2, F@_3,
-				  F@_4, F@_5, TrUserData);
+			       F@_5, F@_6, TrUserData);
+      32 ->
+	  d_field_Order_quantity(Rest, 0, 0, F@_1, F@_2, F@_3,
+				 F@_4, F@_5, F@_6, TrUserData);
+      41 ->
+	  d_field_Order_price(Rest, 0, 0, F@_1, F@_2, F@_3, F@_4,
+			      F@_5, F@_6, TrUserData);
+      50 ->
+	  d_field_Order_user(Rest, 0, 0, F@_1, F@_2, F@_3, F@_4,
+			     F@_5, F@_6, TrUserData);
       _ ->
 	  case Key band 7 of
 	    0 ->
 		skip_varint_Order(Rest, 0, 0, F@_1, F@_2, F@_3, F@_4,
-				  F@_5, TrUserData);
+				  F@_5, F@_6, TrUserData);
 	    1 ->
 		skip_64_Order(Rest, 0, 0, F@_1, F@_2, F@_3, F@_4, F@_5,
-			      TrUserData);
+			      F@_6, TrUserData);
 	    2 ->
 		skip_length_delimited_Order(Rest, 0, 0, F@_1, F@_2,
-					    F@_3, F@_4, F@_5, TrUserData);
+					    F@_3, F@_4, F@_5, F@_6, TrUserData);
 	    3 ->
 		skip_group_Order(Rest, Key bsr 3, 0, F@_1, F@_2, F@_3,
-				 F@_4, F@_5, TrUserData);
+				 F@_4, F@_5, F@_6, TrUserData);
 	    5 ->
 		skip_32_Order(Rest, 0, 0, F@_1, F@_2, F@_3, F@_4, F@_5,
-			      TrUserData)
+			      F@_6, TrUserData)
 	  end
     end;
 dg_read_field_def_Order(<<>>, 0, 0, F@_1, F@_2, F@_3,
-			F@_4, F@_5, _) ->
-    #'Order'{quantity = F@_1, price = F@_2, user = F@_3,
-	     symbol = F@_4, orderType = F@_5}.
+			F@_4, F@_5, F@_6, _) ->
+    #'Order'{confirmation = F@_1, type = F@_2,
+	     symbol = F@_3, quantity = F@_4, price = F@_5,
+	     user = F@_6}.
 
-d_field_Order_quantity(<<1:1, X:7, Rest/binary>>, N,
-		       Acc, F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData)
+d_field_Order_confirmation(<<1:1, X:7, Rest/binary>>, N,
+			   Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData)
     when N < 57 ->
-    d_field_Order_quantity(Rest, N + 7, X bsl N + Acc, F@_1,
-			   F@_2, F@_3, F@_4, F@_5, TrUserData);
-d_field_Order_quantity(<<0:1, X:7, Rest/binary>>, N,
-		       Acc, _, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
-    {NewFValue, RestF} = {begin
-			    <<Res:32/signed-native>> = <<(X bsl N +
-							    Acc):32/unsigned-native>>,
-			    Res
-			  end,
-			  Rest},
+    d_field_Order_confirmation(Rest, N + 7, X bsl N + Acc,
+			       F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData);
+d_field_Order_confirmation(<<0:1, X:7, Rest/binary>>, N,
+			   Acc, _, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData) ->
+    {NewFValue, RestF} = {X bsl N + Acc =/= 0, Rest},
     dfp_read_field_def_Order(RestF, 0, 0, NewFValue, F@_2,
-			     F@_3, F@_4, F@_5, TrUserData).
+			     F@_3, F@_4, F@_5, F@_6, TrUserData).
 
-d_field_Order_price(<<0:16, 128, 127, Rest/binary>>, Z1,
-		    Z2, F@_1, _, F@_3, F@_4, F@_5, TrUserData) ->
-    dfp_read_field_def_Order(Rest, Z1, Z2, F@_1, infinity,
-			     F@_3, F@_4, F@_5, TrUserData);
-d_field_Order_price(<<0:16, 128, 255, Rest/binary>>, Z1,
-		    Z2, F@_1, _, F@_3, F@_4, F@_5, TrUserData) ->
-    dfp_read_field_def_Order(Rest, Z1, Z2, F@_1,
-			     '-infinity', F@_3, F@_4, F@_5, TrUserData);
-d_field_Order_price(<<_:16, 1:1, _:7, _:1, 127:7,
-		      Rest/binary>>,
-		    Z1, Z2, F@_1, _, F@_3, F@_4, F@_5, TrUserData) ->
-    dfp_read_field_def_Order(Rest, Z1, Z2, F@_1, nan, F@_3,
-			     F@_4, F@_5, TrUserData);
-d_field_Order_price(<<Value:32/little-float,
-		      Rest/binary>>,
-		    Z1, Z2, F@_1, _, F@_3, F@_4, F@_5, TrUserData) ->
-    dfp_read_field_def_Order(Rest, Z1, Z2, F@_1, Value,
-			     F@_3, F@_4, F@_5, TrUserData).
-
-d_field_Order_user(<<1:1, X:7, Rest/binary>>, N, Acc,
-		   F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData)
+d_field_Order_type(<<1:1, X:7, Rest/binary>>, N, Acc,
+		   F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData)
     when N < 57 ->
-    d_field_Order_user(Rest, N + 7, X bsl N + Acc, F@_1,
-		       F@_2, F@_3, F@_4, F@_5, TrUserData);
-d_field_Order_user(<<0:1, X:7, Rest/binary>>, N, Acc,
-		   F@_1, F@_2, _, F@_4, F@_5, TrUserData) ->
+    d_field_Order_type(Rest, N + 7, X bsl N + Acc, F@_1,
+		       F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData);
+d_field_Order_type(<<0:1, X:7, Rest/binary>>, N, Acc,
+		   F@_1, _, F@_3, F@_4, F@_5, F@_6, TrUserData) ->
+    {NewFValue, RestF} = {X bsl N + Acc =/= 0, Rest},
+    dfp_read_field_def_Order(RestF, 0, 0, F@_1, NewFValue,
+			     F@_3, F@_4, F@_5, F@_6, TrUserData).
+
+d_field_Order_symbol(<<1:1, X:7, Rest/binary>>, N, Acc,
+		     F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData)
+    when N < 57 ->
+    d_field_Order_symbol(Rest, N + 7, X bsl N + Acc, F@_1,
+			 F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData);
+d_field_Order_symbol(<<0:1, X:7, Rest/binary>>, N, Acc,
+		     F@_1, F@_2, _, F@_4, F@_5, F@_6, TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
 			   <<Bytes:Len/binary, Rest2/binary>> = Rest,
 			   {binary:copy(Bytes), Rest2}
 			 end,
     dfp_read_field_def_Order(RestF, 0, 0, F@_1, F@_2,
-			     NewFValue, F@_4, F@_5, TrUserData).
+			     NewFValue, F@_4, F@_5, F@_6, TrUserData).
 
-d_field_Order_symbol(<<1:1, X:7, Rest/binary>>, N, Acc,
-		     F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData)
+d_field_Order_quantity(<<1:1, X:7, Rest/binary>>, N,
+		       Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData)
     when N < 57 ->
-    d_field_Order_symbol(Rest, N + 7, X bsl N + Acc, F@_1,
-			 F@_2, F@_3, F@_4, F@_5, TrUserData);
-d_field_Order_symbol(<<0:1, X:7, Rest/binary>>, N, Acc,
-		     F@_1, F@_2, F@_3, _, F@_5, TrUserData) ->
+    d_field_Order_quantity(Rest, N + 7, X bsl N + Acc, F@_1,
+			   F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData);
+d_field_Order_quantity(<<0:1, X:7, Rest/binary>>, N,
+		       Acc, F@_1, F@_2, F@_3, _, F@_5, F@_6, TrUserData) ->
+    {NewFValue, RestF} = {begin
+			    <<Res:32/signed-native>> = <<(X bsl N +
+							    Acc):32/unsigned-native>>,
+			    Res
+			  end,
+			  Rest},
+    dfp_read_field_def_Order(RestF, 0, 0, F@_1, F@_2, F@_3,
+			     NewFValue, F@_5, F@_6, TrUserData).
+
+d_field_Order_price(<<0:48, 240, 127, Rest/binary>>, Z1,
+		    Z2, F@_1, F@_2, F@_3, F@_4, _, F@_6, TrUserData) ->
+    dfp_read_field_def_Order(Rest, Z1, Z2, F@_1, F@_2, F@_3,
+			     F@_4, infinity, F@_6, TrUserData);
+d_field_Order_price(<<0:48, 240, 255, Rest/binary>>, Z1,
+		    Z2, F@_1, F@_2, F@_3, F@_4, _, F@_6, TrUserData) ->
+    dfp_read_field_def_Order(Rest, Z1, Z2, F@_1, F@_2, F@_3,
+			     F@_4, '-infinity', F@_6, TrUserData);
+d_field_Order_price(<<_:48, 15:4, _:4, _:1, 127:7,
+		      Rest/binary>>,
+		    Z1, Z2, F@_1, F@_2, F@_3, F@_4, _, F@_6, TrUserData) ->
+    dfp_read_field_def_Order(Rest, Z1, Z2, F@_1, F@_2, F@_3,
+			     F@_4, nan, F@_6, TrUserData);
+d_field_Order_price(<<Value:64/little-float,
+		      Rest/binary>>,
+		    Z1, Z2, F@_1, F@_2, F@_3, F@_4, _, F@_6, TrUserData) ->
+    dfp_read_field_def_Order(Rest, Z1, Z2, F@_1, F@_2, F@_3,
+			     F@_4, Value, F@_6, TrUserData).
+
+d_field_Order_user(<<1:1, X:7, Rest/binary>>, N, Acc,
+		   F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData)
+    when N < 57 ->
+    d_field_Order_user(Rest, N + 7, X bsl N + Acc, F@_1,
+		       F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData);
+d_field_Order_user(<<0:1, X:7, Rest/binary>>, N, Acc,
+		   F@_1, F@_2, F@_3, F@_4, F@_5, _, TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
 			   <<Bytes:Len/binary, Rest2/binary>> = Rest,
 			   {binary:copy(Bytes), Rest2}
 			 end,
     dfp_read_field_def_Order(RestF, 0, 0, F@_1, F@_2, F@_3,
-			     NewFValue, F@_5, TrUserData).
-
-d_field_Order_orderType(<<1:1, X:7, Rest/binary>>, N,
-			Acc, F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData)
-    when N < 57 ->
-    d_field_Order_orderType(Rest, N + 7, X bsl N + Acc,
-			    F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData);
-d_field_Order_orderType(<<0:1, X:7, Rest/binary>>, N,
-			Acc, F@_1, F@_2, F@_3, F@_4, _, TrUserData) ->
-    {NewFValue, RestF} = {X bsl N + Acc =/= 0, Rest},
-    dfp_read_field_def_Order(RestF, 0, 0, F@_1, F@_2, F@_3,
-			     F@_4, NewFValue, TrUserData).
+			     F@_4, F@_5, NewFValue, TrUserData).
 
 skip_varint_Order(<<1:1, _:7, Rest/binary>>, Z1, Z2,
-		  F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
+		  F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData) ->
     skip_varint_Order(Rest, Z1, Z2, F@_1, F@_2, F@_3, F@_4,
-		      F@_5, TrUserData);
+		      F@_5, F@_6, TrUserData);
 skip_varint_Order(<<0:1, _:7, Rest/binary>>, Z1, Z2,
-		  F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
+		  F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData) ->
     dfp_read_field_def_Order(Rest, Z1, Z2, F@_1, F@_2, F@_3,
-			     F@_4, F@_5, TrUserData).
+			     F@_4, F@_5, F@_6, TrUserData).
 
 skip_length_delimited_Order(<<1:1, X:7, Rest/binary>>,
-			    N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData)
+			    N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+			    TrUserData)
     when N < 57 ->
     skip_length_delimited_Order(Rest, N + 7, X bsl N + Acc,
-				F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData);
+				F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData);
 skip_length_delimited_Order(<<0:1, X:7, Rest/binary>>,
-			    N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, TrUserData) ->
+			    N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+			    TrUserData) ->
     Length = X bsl N + Acc,
     <<_:Length/binary, Rest2/binary>> = Rest,
     dfp_read_field_def_Order(Rest2, 0, 0, F@_1, F@_2, F@_3,
-			     F@_4, F@_5, TrUserData).
+			     F@_4, F@_5, F@_6, TrUserData).
 
 skip_group_Order(Bin, FNum, Z2, F@_1, F@_2, F@_3, F@_4,
-		 F@_5, TrUserData) ->
+		 F@_5, F@_6, TrUserData) ->
     {_, Rest} = read_group(Bin, FNum),
     dfp_read_field_def_Order(Rest, 0, Z2, F@_1, F@_2, F@_3,
-			     F@_4, F@_5, TrUserData).
+			     F@_4, F@_5, F@_6, TrUserData).
 
 skip_32_Order(<<_:32, Rest/binary>>, Z1, Z2, F@_1, F@_2,
-	      F@_3, F@_4, F@_5, TrUserData) ->
+	      F@_3, F@_4, F@_5, F@_6, TrUserData) ->
     dfp_read_field_def_Order(Rest, Z1, Z2, F@_1, F@_2, F@_3,
-			     F@_4, F@_5, TrUserData).
+			     F@_4, F@_5, F@_6, TrUserData).
 
 skip_64_Order(<<_:64, Rest/binary>>, Z1, Z2, F@_1, F@_2,
-	      F@_3, F@_4, F@_5, TrUserData) ->
+	      F@_3, F@_4, F@_5, F@_6, TrUserData) ->
     dfp_read_field_def_Order(Rest, Z1, Z2, F@_1, F@_2, F@_3,
-			     F@_4, F@_5, TrUserData).
+			     F@_4, F@_5, F@_6, TrUserData).
 
 read_group(Bin, FieldNum) ->
     {NumBytes, EndTagLen} = read_gr_b(Bin, 0, 0, 0, 0, FieldNum),
@@ -437,33 +420,14 @@ merge_msgs(Prev, New, Opts)
       #'Order'{} -> merge_msg_Order(Prev, New, TrUserData)
     end.
 
-merge_msg_Order(#'Order'{quantity = PFquantity,
-			 price = PFprice, user = PFuser, symbol = PFsymbol,
-			 orderType = PForderType},
-		#'Order'{quantity = NFquantity, price = NFprice,
-			 user = NFuser, symbol = NFsymbol,
-			 orderType = NForderType},
+merge_msg_Order(#'Order'{},
+		#'Order'{confirmation = NFconfirmation, type = NFtype,
+			 symbol = NFsymbol, quantity = NFquantity,
+			 price = NFprice, user = NFuser},
 		_) ->
-    #'Order'{quantity =
-		 if NFquantity =:= undefined -> PFquantity;
-		    true -> NFquantity
-		 end,
-	     price =
-		 if NFprice =:= undefined -> PFprice;
-		    true -> NFprice
-		 end,
-	     user =
-		 if NFuser =:= undefined -> PFuser;
-		    true -> NFuser
-		 end,
-	     symbol =
-		 if NFsymbol =:= undefined -> PFsymbol;
-		    true -> NFsymbol
-		 end,
-	     orderType =
-		 if NForderType =:= undefined -> PForderType;
-		    true -> NForderType
-		 end}.
+    #'Order'{confirmation = NFconfirmation, type = NFtype,
+	     symbol = NFsymbol, quantity = NFquantity,
+	     price = NFprice, user = NFuser}.
 
 
 verify_msg(Msg) -> verify_msg(Msg, []).
@@ -477,24 +441,15 @@ verify_msg(Msg, Opts) ->
 
 
 -dialyzer({nowarn_function,v_msg_Order/3}).
-v_msg_Order(#'Order'{quantity = F1, price = F2,
-		     user = F3, symbol = F4, orderType = F5},
+v_msg_Order(#'Order'{confirmation = F1, type = F2,
+		     symbol = F3, quantity = F4, price = F5, user = F6},
 	    Path, _) ->
-    if F1 == undefined -> ok;
-       true -> v_type_int32(F1, [quantity | Path])
-    end,
-    if F2 == undefined -> ok;
-       true -> v_type_float(F2, [price | Path])
-    end,
-    if F3 == undefined -> ok;
-       true -> v_type_string(F3, [user | Path])
-    end,
-    if F4 == undefined -> ok;
-       true -> v_type_string(F4, [symbol | Path])
-    end,
-    if F5 == undefined -> ok;
-       true -> v_type_bool(F5, [orderType | Path])
-    end,
+    v_type_bool(F1, [confirmation | Path]),
+    v_type_bool(F2, [type | Path]),
+    v_type_string(F3, [symbol | Path]),
+    v_type_int32(F4, [quantity | Path]),
+    v_type_double(F5, [price | Path]),
+    v_type_string(F6, [user | Path]),
     ok.
 
 -dialyzer({nowarn_function,v_type_int32/2}).
@@ -516,14 +471,14 @@ v_type_bool(1, _Path) -> ok;
 v_type_bool(X, Path) ->
     mk_type_error(bad_boolean_value, X, Path).
 
--dialyzer({nowarn_function,v_type_float/2}).
-v_type_float(N, _Path) when is_float(N) -> ok;
-v_type_float(N, _Path) when is_integer(N) -> ok;
-v_type_float(infinity, _Path) -> ok;
-v_type_float('-infinity', _Path) -> ok;
-v_type_float(nan, _Path) -> ok;
-v_type_float(X, Path) ->
-    mk_type_error(bad_float_value, X, Path).
+-dialyzer({nowarn_function,v_type_double/2}).
+v_type_double(N, _Path) when is_float(N) -> ok;
+v_type_double(N, _Path) when is_integer(N) -> ok;
+v_type_double(infinity, _Path) -> ok;
+v_type_double('-infinity', _Path) -> ok;
+v_type_double(nan, _Path) -> ok;
+v_type_double(X, Path) ->
+    mk_type_error(bad_double_value, X, Path).
 
 -dialyzer({nowarn_function,v_type_string/2}).
 v_type_string(S, Path) when is_list(S); is_binary(S) ->
@@ -558,16 +513,18 @@ id(X, _TrUserData) -> X.
 
 get_msg_defs() ->
     [{{msg, 'Order'},
-      [#field{name = quantity, fnum = 1, rnum = 2,
-	      type = int32, occurrence = optional, opts = []},
-       #field{name = price, fnum = 2, rnum = 3, type = float,
-	      occurrence = optional, opts = []},
-       #field{name = user, fnum = 3, rnum = 4, type = string,
-	      occurrence = optional, opts = []},
-       #field{name = symbol, fnum = 4, rnum = 5, type = string,
-	      occurrence = optional, opts = []},
-       #field{name = orderType, fnum = 5, rnum = 6,
-	      type = bool, occurrence = optional, opts = []}]}].
+      [#field{name = confirmation, fnum = 1, rnum = 2,
+	      type = bool, occurrence = required, opts = []},
+       #field{name = type, fnum = 2, rnum = 3, type = bool,
+	      occurrence = required, opts = []},
+       #field{name = symbol, fnum = 3, rnum = 4, type = string,
+	      occurrence = required, opts = []},
+       #field{name = quantity, fnum = 4, rnum = 5,
+	      type = int32, occurrence = required, opts = []},
+       #field{name = price, fnum = 5, rnum = 6, type = double,
+	      occurrence = required, opts = []},
+       #field{name = user, fnum = 6, rnum = 7, type = string,
+	      occurrence = required, opts = []}]}].
 
 
 get_msg_names() -> ['Order'].
@@ -595,16 +552,18 @@ fetch_enum_def(EnumName) ->
 
 
 find_msg_def('Order') ->
-    [#field{name = quantity, fnum = 1, rnum = 2,
-	    type = int32, occurrence = optional, opts = []},
-     #field{name = price, fnum = 2, rnum = 3, type = float,
-	    occurrence = optional, opts = []},
-     #field{name = user, fnum = 3, rnum = 4, type = string,
-	    occurrence = optional, opts = []},
-     #field{name = symbol, fnum = 4, rnum = 5, type = string,
-	    occurrence = optional, opts = []},
-     #field{name = orderType, fnum = 5, rnum = 6,
-	    type = bool, occurrence = optional, opts = []}];
+    [#field{name = confirmation, fnum = 1, rnum = 2,
+	    type = bool, occurrence = required, opts = []},
+     #field{name = type, fnum = 2, rnum = 3, type = bool,
+	    occurrence = required, opts = []},
+     #field{name = symbol, fnum = 3, rnum = 4, type = string,
+	    occurrence = required, opts = []},
+     #field{name = quantity, fnum = 4, rnum = 5,
+	    type = int32, occurrence = required, opts = []},
+     #field{name = price, fnum = 5, rnum = 6, type = double,
+	    occurrence = required, opts = []},
+     #field{name = user, fnum = 6, rnum = 7, type = string,
+	    occurrence = required, opts = []}];
 find_msg_def(_) -> error.
 
 

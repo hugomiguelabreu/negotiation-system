@@ -8,26 +8,34 @@
 %export port set to 3001
 
 
-init() -> 
+init() ->
 	io:format("start orders\n"),
+	spawn(fun() -> start_from_client() end),
+	spawn(fun() -> start_from_exchange() end).
+
+
+% esta a escuta na porta 3000 de clientes que queiram comprar
+start_from_client() -> 
 	{ok, LSocket} =  gen_tcp:listen(3000, [binary, {reuseaddr, true}, {packet, 1}]),
-	acceptor(LSocket).
+	acceptor_from_client(LSocket).
 
-acceptor(LSock) ->
+% esta a escuta na porta 3001 de cenas que venham da exchange
+start_from_exchange() -> 
+	{ok, LSocket} =  gen_tcp:listen(3001, [binary, {reuseaddr, true}, {packet, 1}]),
+	acceptor_from_exchange(LSocket).
+
+acceptor_from_client(LSock) ->
 	{ok, Sock} = gen_tcp:accept(LSock),
-	spawn(fun() -> acceptor(LSock) end),
-	forwarder(Sock).
+	spawn(fun() -> acceptor_from_client(LSock) end),
+	forwarder_from_client(Sock).
 
+acceptor_from_exchange(LSock) ->
+	{ok, Sock} = gen_tcp:accept(LSock),
+	spawn(fun() -> acceptor_from_exchange(LSock) end),
+	forwarder_from_exchange(Sock).
 
 % este mano recebe order.proto do cliente e manda para o servidor
-% forwarder(Sock) ->
-% 	receive
-% 		{tcp, From, Data} ->
-% 			% abre o protobuff e ve o symbol
-% 			% ve na cache e manda para o servidor coorespondente
-
-
-forwarder(Socket) -> 
+forwarder_from_client(Socket) -> 
 	receive
 		{tcp, Socket, Data} ->
 			Ret = order:decode_msg(Data, 'Order'),
@@ -35,46 +43,62 @@ forwarder(Socket) ->
 			case db:select_cache(Symbol) of
 				{ok, Addr} -> 
 					List = binary:bin_to_list(Addr),
-					Tokens = string:tokens(List, ":"),
-					Port = string:to_integer(lists:last(Tokens)),
-					Packed = order:encode_msg(Ret,'Order'),
-					{ok, Sock} = gen_tcp:connect("localhost", Port, [binary, {reuseaddr, true}]),
-					gen_tcp:send(Sock, Packed),
-					gen_tcp:close(Sock);
+					send_to_exchange(Data, List);
 				undefined ->
 					Naddr = getJson:getCompany(Symbol),
 					ListU = binary:bin_to_list(Naddr),
-					TokensU = string:tokens(ListU, ":"),
-					PortU = string:to_integer(lists:last(TokensU)),
-					% PackedU = repack(Ret),
-					io:format("kappa\n"),
-					{ok, SockU} = gen_tcp:connect("localhost", 3001, [binary, {reuseaddr, true}]),
-					io:format("vai mandar as cenas\n"),
-					gen_tcp:send(SockU, Data),
-					gen_tcp:close(SockU)
+					send_to_exchange(Data, ListU)
+					% TokensU = string:tokens(ListU, ":"),
+					% {PortU, _} = string:to_integer(lists:last(TokensU)),
+					% {ok, SockU} = gen_tcp:connect("localhost", PortU, [binary, {reuseaddr, true}]),
+					% io:format("vai mandar as cenas\n"),
+					% gen_tcp:send(SockU, Data)
 			end;
-		{tcp_closed, From} ->
+		{tcp_closed, _} ->
       		exit("user closed");
-    	{tcp_error, From, _} ->
+    	_ ->
       		exit("error")
 	end.
 
+forwarder_from_exchange(Socket) -> 
+	receive
+		{tcp, Socket, Data} ->
+			io:format("recebe da exchange");
+		{tcp_closed, _} ->
+      		exit("user closed");
+    	_ ->
+      		exit("error")
+	end.
 
-repack(Ret) ->
-	Type = Ret#'Order'.orderType,
-	Symbol = Ret#'Order'.symbol,
-	Quant = Ret#'Order'.quantity,
-	Price = Ret#'Order'.price,
-	io:format("symbol = "),
-	io:format(Symbol),
-	io:format("\n"),
-	User = Ret#'Order'.user,
-	io:format("user = "),
-	io:format(User),
-	io:format("\n"),
-	io:format("decoded\n"),
-	Packed = order:encode_msg(Ret),
-	Packed.
+send_to_exchange(Data, List) ->
+	Tokens = string:tokens(List, ":"),
+	{Port, _ } = string:to_integer(lists:last(Tokens)),
+	{ok, Sock} = gen_tcp:connect("localhost", Port, [binary, {reuseaddr, true}]),
+	gen_tcp:send(Sock, Data),
+	gen_tcp:close(Sock).
+	% receive_from_exchange(Sock).
+
+% receive_from_exchange(Sock) ->
+% 	receive
+% 		{tcp, Sock, Data} ->
+
+
+
+% repack(Ret) ->
+% 	Type = Ret#'Order'.type,
+% 	Symbol = Ret#'Order'.symbol,
+% 	Quant = Ret#'Order'.quantity,
+% 	Price = Ret#'Order'.price,
+% 	io:format("symbol = "),
+% 	io:format(Symbol),
+% 	io:format("\n"),
+% 	User = Ret#'Order'.user,
+% 	io:format("user = "),
+% 	io:format(User),
+% 	io:format("\n"),
+% 	io:format("decoded\n"),
+% 	Packed = order:encode_msg(Ret),
+% 	Packed.
 
 
 
