@@ -23,63 +23,39 @@ public final class OrderOuterClass {
      *true -&gt; BUY false -&gt; SELL
      * </pre>
      *
-     * <code>required bool orderType = 1;</code>
+     * <code>int32 quantity = 1;</code>
      */
-    boolean hasOrderType();
-    /**
-     * <pre>
-     *true -&gt; BUY false -&gt; SELL
-     * </pre>
-     *
-     * <code>required bool orderType = 1;</code>
-     */
-    boolean getOrderType();
+    int getQuantity();
 
     /**
-     * <code>required string symbol = 2;</code>
+     * <code>float price = 2;</code>
      */
-    boolean hasSymbol();
+    float getPrice();
+
     /**
-     * <code>required string symbol = 2;</code>
+     * <code>string user = 3;</code>
+     */
+    java.lang.String getUser();
+    /**
+     * <code>string user = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getUserBytes();
+
+    /**
+     * <code>string symbol = 4;</code>
      */
     java.lang.String getSymbol();
     /**
-     * <code>required string symbol = 2;</code>
+     * <code>string symbol = 4;</code>
      */
     com.google.protobuf.ByteString
         getSymbolBytes();
 
     /**
-     * <code>required int32 quantity = 3;</code>
+     * <code>bool orderType = 5;</code>
      */
-    boolean hasQuantity();
-    /**
-     * <code>required int32 quantity = 3;</code>
-     */
-    int getQuantity();
-
-    /**
-     * <code>required double price = 4;</code>
-     */
-    boolean hasPrice();
-    /**
-     * <code>required double price = 4;</code>
-     */
-    double getPrice();
-
-    /**
-     * <code>required string user = 5;</code>
-     */
-    boolean hasUser();
-    /**
-     * <code>required string user = 5;</code>
-     */
-    java.lang.String getUser();
-    /**
-     * <code>required string user = 5;</code>
-     */
-    com.google.protobuf.ByteString
-        getUserBytes();
+    boolean getOrderType();
   }
   /**
    * Protobuf type {@code order.Order}
@@ -94,11 +70,11 @@ public final class OrderOuterClass {
       super(builder);
     }
     private Order() {
-      orderType_ = false;
-      symbol_ = "";
       quantity_ = 0;
-      price_ = 0D;
+      price_ = 0F;
       user_ = "";
+      symbol_ = "";
+      orderType_ = false;
     }
 
     @java.lang.Override
@@ -123,37 +99,37 @@ public final class OrderOuterClass {
               done = true;
               break;
             default: {
-              if (!parseUnknownField(
+              if (!parseUnknownFieldProto3(
                   input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
             }
             case 8: {
-              bitField0_ |= 0x00000001;
-              orderType_ = input.readBool();
-              break;
-            }
-            case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              symbol_ = bs;
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
+
               quantity_ = input.readInt32();
               break;
             }
-            case 33: {
-              bitField0_ |= 0x00000008;
-              price_ = input.readDouble();
+            case 21: {
+
+              price_ = input.readFloat();
               break;
             }
-            case 42: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000010;
-              user_ = bs;
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              user_ = s;
+              break;
+            }
+            case 34: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              symbol_ = s;
+              break;
+            }
+            case 40: {
+
+              orderType_ = input.readBool();
               break;
             }
           }
@@ -180,112 +156,32 @@ public final class OrderOuterClass {
               data.OrderOuterClass.Order.class, data.OrderOuterClass.Order.Builder.class);
     }
 
-    private int bitField0_;
-    public static final int ORDERTYPE_FIELD_NUMBER = 1;
-    private boolean orderType_;
-    /**
-     * <pre>
-     *true -&gt; BUY false -&gt; SELL
-     * </pre>
-     *
-     * <code>required bool orderType = 1;</code>
-     */
-    public boolean hasOrderType() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <pre>
-     *true -&gt; BUY false -&gt; SELL
-     * </pre>
-     *
-     * <code>required bool orderType = 1;</code>
-     */
-    public boolean getOrderType() {
-      return orderType_;
-    }
-
-    public static final int SYMBOL_FIELD_NUMBER = 2;
-    private volatile java.lang.Object symbol_;
-    /**
-     * <code>required string symbol = 2;</code>
-     */
-    public boolean hasSymbol() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required string symbol = 2;</code>
-     */
-    public java.lang.String getSymbol() {
-      java.lang.Object ref = symbol_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          symbol_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string symbol = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getSymbolBytes() {
-      java.lang.Object ref = symbol_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        symbol_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int QUANTITY_FIELD_NUMBER = 3;
+    public static final int QUANTITY_FIELD_NUMBER = 1;
     private int quantity_;
     /**
-     * <code>required int32 quantity = 3;</code>
-     */
-    public boolean hasQuantity() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>required int32 quantity = 3;</code>
+     * <pre>
+     *true -&gt; BUY false -&gt; SELL
+     * </pre>
+     *
+     * <code>int32 quantity = 1;</code>
      */
     public int getQuantity() {
       return quantity_;
     }
 
-    public static final int PRICE_FIELD_NUMBER = 4;
-    private double price_;
+    public static final int PRICE_FIELD_NUMBER = 2;
+    private float price_;
     /**
-     * <code>required double price = 4;</code>
+     * <code>float price = 2;</code>
      */
-    public boolean hasPrice() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>required double price = 4;</code>
-     */
-    public double getPrice() {
+    public float getPrice() {
       return price_;
     }
 
-    public static final int USER_FIELD_NUMBER = 5;
+    public static final int USER_FIELD_NUMBER = 3;
     private volatile java.lang.Object user_;
     /**
-     * <code>required string user = 5;</code>
-     */
-    public boolean hasUser() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>required string user = 5;</code>
+     * <code>string user = 3;</code>
      */
     public java.lang.String getUser() {
       java.lang.Object ref = user_;
@@ -295,14 +191,12 @@ public final class OrderOuterClass {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          user_ = s;
-        }
+        user_ = s;
         return s;
       }
     }
     /**
-     * <code>required string user = 5;</code>
+     * <code>string user = 3;</code>
      */
     public com.google.protobuf.ByteString
         getUserBytes() {
@@ -318,52 +212,75 @@ public final class OrderOuterClass {
       }
     }
 
+    public static final int SYMBOL_FIELD_NUMBER = 4;
+    private volatile java.lang.Object symbol_;
+    /**
+     * <code>string symbol = 4;</code>
+     */
+    public java.lang.String getSymbol() {
+      java.lang.Object ref = symbol_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        symbol_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string symbol = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getSymbolBytes() {
+      java.lang.Object ref = symbol_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        symbol_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int ORDERTYPE_FIELD_NUMBER = 5;
+    private boolean orderType_;
+    /**
+     * <code>bool orderType = 5;</code>
+     */
+    public boolean getOrderType() {
+      return orderType_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
-      if (!hasOrderType()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasSymbol()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasQuantity()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasPrice()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasUser()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       memoizedIsInitialized = 1;
       return true;
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBool(1, orderType_);
+      if (quantity_ != 0) {
+        output.writeInt32(1, quantity_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, symbol_);
+      if (price_ != 0F) {
+        output.writeFloat(2, price_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, quantity_);
+      if (!getUserBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, user_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeDouble(4, price_);
+      if (!getSymbolBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, symbol_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, user_);
+      if (orderType_ != false) {
+        output.writeBool(5, orderType_);
       }
       unknownFields.writeTo(output);
     }
@@ -373,23 +290,23 @@ public final class OrderOuterClass {
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (quantity_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(1, orderType_);
+          .computeInt32Size(1, quantity_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, symbol_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (price_ != 0F) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, quantity_);
+          .computeFloatSize(2, price_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (!getUserBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, user_);
+      }
+      if (!getSymbolBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, symbol_);
+      }
+      if (orderType_ != false) {
         size += com.google.protobuf.CodedOutputStream
-          .computeDoubleSize(4, price_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, user_);
+          .computeBoolSize(5, orderType_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -407,33 +324,18 @@ public final class OrderOuterClass {
       data.OrderOuterClass.Order other = (data.OrderOuterClass.Order) obj;
 
       boolean result = true;
-      result = result && (hasOrderType() == other.hasOrderType());
-      if (hasOrderType()) {
-        result = result && (getOrderType()
-            == other.getOrderType());
-      }
-      result = result && (hasSymbol() == other.hasSymbol());
-      if (hasSymbol()) {
-        result = result && getSymbol()
-            .equals(other.getSymbol());
-      }
-      result = result && (hasQuantity() == other.hasQuantity());
-      if (hasQuantity()) {
-        result = result && (getQuantity()
-            == other.getQuantity());
-      }
-      result = result && (hasPrice() == other.hasPrice());
-      if (hasPrice()) {
-        result = result && (
-            java.lang.Double.doubleToLongBits(getPrice())
-            == java.lang.Double.doubleToLongBits(
-                other.getPrice()));
-      }
-      result = result && (hasUser() == other.hasUser());
-      if (hasUser()) {
-        result = result && getUser()
-            .equals(other.getUser());
-      }
+      result = result && (getQuantity()
+          == other.getQuantity());
+      result = result && (
+          java.lang.Float.floatToIntBits(getPrice())
+          == java.lang.Float.floatToIntBits(
+              other.getPrice()));
+      result = result && getUser()
+          .equals(other.getUser());
+      result = result && getSymbol()
+          .equals(other.getSymbol());
+      result = result && (getOrderType()
+          == other.getOrderType());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -445,28 +347,18 @@ public final class OrderOuterClass {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasOrderType()) {
-        hash = (37 * hash) + ORDERTYPE_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-            getOrderType());
-      }
-      if (hasSymbol()) {
-        hash = (37 * hash) + SYMBOL_FIELD_NUMBER;
-        hash = (53 * hash) + getSymbol().hashCode();
-      }
-      if (hasQuantity()) {
-        hash = (37 * hash) + QUANTITY_FIELD_NUMBER;
-        hash = (53 * hash) + getQuantity();
-      }
-      if (hasPrice()) {
-        hash = (37 * hash) + PRICE_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-            java.lang.Double.doubleToLongBits(getPrice()));
-      }
-      if (hasUser()) {
-        hash = (37 * hash) + USER_FIELD_NUMBER;
-        hash = (53 * hash) + getUser().hashCode();
-      }
+      hash = (37 * hash) + QUANTITY_FIELD_NUMBER;
+      hash = (53 * hash) + getQuantity();
+      hash = (37 * hash) + PRICE_FIELD_NUMBER;
+      hash = (53 * hash) + java.lang.Float.floatToIntBits(
+          getPrice());
+      hash = (37 * hash) + USER_FIELD_NUMBER;
+      hash = (53 * hash) + getUser().hashCode();
+      hash = (37 * hash) + SYMBOL_FIELD_NUMBER;
+      hash = (53 * hash) + getSymbol().hashCode();
+      hash = (37 * hash) + ORDERTYPE_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getOrderType());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -596,16 +488,16 @@ public final class OrderOuterClass {
       }
       public Builder clear() {
         super.clear();
-        orderType_ = false;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        symbol_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
         quantity_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        price_ = 0D;
-        bitField0_ = (bitField0_ & ~0x00000008);
+
+        price_ = 0F;
+
         user_ = "";
-        bitField0_ = (bitField0_ & ~0x00000010);
+
+        symbol_ = "";
+
+        orderType_ = false;
+
         return this;
       }
 
@@ -628,29 +520,11 @@ public final class OrderOuterClass {
 
       public data.OrderOuterClass.Order buildPartial() {
         data.OrderOuterClass.Order result = new data.OrderOuterClass.Order(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.orderType_ = orderType_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.symbol_ = symbol_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
         result.quantity_ = quantity_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
         result.price_ = price_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
         result.user_ = user_;
-        result.bitField0_ = to_bitField0_;
+        result.symbol_ = symbol_;
+        result.orderType_ = orderType_;
         onBuilt();
         return result;
       }
@@ -692,24 +566,22 @@ public final class OrderOuterClass {
 
       public Builder mergeFrom(data.OrderOuterClass.Order other) {
         if (other == data.OrderOuterClass.Order.getDefaultInstance()) return this;
-        if (other.hasOrderType()) {
-          setOrderType(other.getOrderType());
+        if (other.getQuantity() != 0) {
+          setQuantity(other.getQuantity());
         }
-        if (other.hasSymbol()) {
-          bitField0_ |= 0x00000002;
+        if (other.getPrice() != 0F) {
+          setPrice(other.getPrice());
+        }
+        if (!other.getUser().isEmpty()) {
+          user_ = other.user_;
+          onChanged();
+        }
+        if (!other.getSymbol().isEmpty()) {
           symbol_ = other.symbol_;
           onChanged();
         }
-        if (other.hasQuantity()) {
-          setQuantity(other.getQuantity());
-        }
-        if (other.hasPrice()) {
-          setPrice(other.getPrice());
-        }
-        if (other.hasUser()) {
-          bitField0_ |= 0x00000010;
-          user_ = other.user_;
-          onChanged();
+        if (other.getOrderType() != false) {
+          setOrderType(other.getOrderType());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -717,21 +589,6 @@ public final class OrderOuterClass {
       }
 
       public final boolean isInitialized() {
-        if (!hasOrderType()) {
-          return false;
-        }
-        if (!hasSymbol()) {
-          return false;
-        }
-        if (!hasQuantity()) {
-          return false;
-        }
-        if (!hasPrice()) {
-          return false;
-        }
-        if (!hasUser()) {
-          return false;
-        }
         return true;
       }
 
@@ -752,205 +609,74 @@ public final class OrderOuterClass {
         }
         return this;
       }
-      private int bitField0_;
-
-      private boolean orderType_ ;
-      /**
-       * <pre>
-       *true -&gt; BUY false -&gt; SELL
-       * </pre>
-       *
-       * <code>required bool orderType = 1;</code>
-       */
-      public boolean hasOrderType() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <pre>
-       *true -&gt; BUY false -&gt; SELL
-       * </pre>
-       *
-       * <code>required bool orderType = 1;</code>
-       */
-      public boolean getOrderType() {
-        return orderType_;
-      }
-      /**
-       * <pre>
-       *true -&gt; BUY false -&gt; SELL
-       * </pre>
-       *
-       * <code>required bool orderType = 1;</code>
-       */
-      public Builder setOrderType(boolean value) {
-        bitField0_ |= 0x00000001;
-        orderType_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *true -&gt; BUY false -&gt; SELL
-       * </pre>
-       *
-       * <code>required bool orderType = 1;</code>
-       */
-      public Builder clearOrderType() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        orderType_ = false;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object symbol_ = "";
-      /**
-       * <code>required string symbol = 2;</code>
-       */
-      public boolean hasSymbol() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required string symbol = 2;</code>
-       */
-      public java.lang.String getSymbol() {
-        java.lang.Object ref = symbol_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            symbol_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string symbol = 2;</code>
-       */
-      public com.google.protobuf.ByteString
-          getSymbolBytes() {
-        java.lang.Object ref = symbol_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          symbol_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string symbol = 2;</code>
-       */
-      public Builder setSymbol(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        symbol_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string symbol = 2;</code>
-       */
-      public Builder clearSymbol() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        symbol_ = getDefaultInstance().getSymbol();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string symbol = 2;</code>
-       */
-      public Builder setSymbolBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        symbol_ = value;
-        onChanged();
-        return this;
-      }
 
       private int quantity_ ;
       /**
-       * <code>required int32 quantity = 3;</code>
-       */
-      public boolean hasQuantity() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>required int32 quantity = 3;</code>
+       * <pre>
+       *true -&gt; BUY false -&gt; SELL
+       * </pre>
+       *
+       * <code>int32 quantity = 1;</code>
        */
       public int getQuantity() {
         return quantity_;
       }
       /**
-       * <code>required int32 quantity = 3;</code>
+       * <pre>
+       *true -&gt; BUY false -&gt; SELL
+       * </pre>
+       *
+       * <code>int32 quantity = 1;</code>
        */
       public Builder setQuantity(int value) {
-        bitField0_ |= 0x00000004;
+        
         quantity_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 quantity = 3;</code>
+       * <pre>
+       *true -&gt; BUY false -&gt; SELL
+       * </pre>
+       *
+       * <code>int32 quantity = 1;</code>
        */
       public Builder clearQuantity() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        
         quantity_ = 0;
         onChanged();
         return this;
       }
 
-      private double price_ ;
+      private float price_ ;
       /**
-       * <code>required double price = 4;</code>
+       * <code>float price = 2;</code>
        */
-      public boolean hasPrice() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>required double price = 4;</code>
-       */
-      public double getPrice() {
+      public float getPrice() {
         return price_;
       }
       /**
-       * <code>required double price = 4;</code>
+       * <code>float price = 2;</code>
        */
-      public Builder setPrice(double value) {
-        bitField0_ |= 0x00000008;
+      public Builder setPrice(float value) {
+        
         price_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required double price = 4;</code>
+       * <code>float price = 2;</code>
        */
       public Builder clearPrice() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        price_ = 0D;
+        
+        price_ = 0F;
         onChanged();
         return this;
       }
 
       private java.lang.Object user_ = "";
       /**
-       * <code>required string user = 5;</code>
-       */
-      public boolean hasUser() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>required string user = 5;</code>
+       * <code>string user = 3;</code>
        */
       public java.lang.String getUser() {
         java.lang.Object ref = user_;
@@ -958,16 +684,14 @@ public final class OrderOuterClass {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            user_ = s;
-          }
+          user_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>required string user = 5;</code>
+       * <code>string user = 3;</code>
        */
       public com.google.protobuf.ByteString
           getUserBytes() {
@@ -983,43 +707,139 @@ public final class OrderOuterClass {
         }
       }
       /**
-       * <code>required string user = 5;</code>
+       * <code>string user = 3;</code>
        */
       public Builder setUser(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000010;
+  
         user_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string user = 5;</code>
+       * <code>string user = 3;</code>
        */
       public Builder clearUser() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        
         user_ = getDefaultInstance().getUser();
         onChanged();
         return this;
       }
       /**
-       * <code>required string user = 5;</code>
+       * <code>string user = 3;</code>
        */
       public Builder setUserBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000010;
+  checkByteStringIsUtf8(value);
+        
         user_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object symbol_ = "";
+      /**
+       * <code>string symbol = 4;</code>
+       */
+      public java.lang.String getSymbol() {
+        java.lang.Object ref = symbol_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          symbol_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string symbol = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getSymbolBytes() {
+        java.lang.Object ref = symbol_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          symbol_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string symbol = 4;</code>
+       */
+      public Builder setSymbol(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        symbol_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string symbol = 4;</code>
+       */
+      public Builder clearSymbol() {
+        
+        symbol_ = getDefaultInstance().getSymbol();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string symbol = 4;</code>
+       */
+      public Builder setSymbolBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        symbol_ = value;
+        onChanged();
+        return this;
+      }
+
+      private boolean orderType_ ;
+      /**
+       * <code>bool orderType = 5;</code>
+       */
+      public boolean getOrderType() {
+        return orderType_;
+      }
+      /**
+       * <code>bool orderType = 5;</code>
+       */
+      public Builder setOrderType(boolean value) {
+        
+        orderType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool orderType = 5;</code>
+       */
+      public Builder clearOrderType() {
+        
+        orderType_ = false;
         onChanged();
         return this;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+        return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
@@ -1041,7 +861,7 @@ public final class OrderOuterClass {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<Order>
+    private static final com.google.protobuf.Parser<Order>
         PARSER = new com.google.protobuf.AbstractParser<Order>() {
       public Order parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
@@ -1080,9 +900,10 @@ public final class OrderOuterClass {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013order.proto\022\005order\"Y\n\005Order\022\021\n\torderTy" +
-      "pe\030\001 \002(\010\022\016\n\006symbol\030\002 \002(\t\022\020\n\010quantity\030\003 \002" +
-      "(\005\022\r\n\005price\030\004 \002(\001\022\014\n\004user\030\005 \002(\tB\006\n\004data"
+      "\n\013order.proto\022\005order\"Y\n\005Order\022\020\n\010quantit" +
+      "y\030\001 \001(\005\022\r\n\005price\030\002 \001(\002\022\014\n\004user\030\003 \001(\t\022\016\n\006" +
+      "symbol\030\004 \001(\t\022\021\n\torderType\030\005 \001(\010B\006\n\004datab" +
+      "\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1101,7 +922,7 @@ public final class OrderOuterClass {
     internal_static_order_Order_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_order_Order_descriptor,
-        new java.lang.String[] { "OrderType", "Symbol", "Quantity", "Price", "User", });
+        new java.lang.String[] { "Quantity", "Price", "User", "Symbol", "OrderType", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
