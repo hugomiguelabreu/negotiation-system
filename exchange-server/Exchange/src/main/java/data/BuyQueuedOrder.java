@@ -9,13 +9,14 @@ public class BuyQueuedOrder extends QueuedOrder {
         super(user, symbol, quantity, setValue, publisher);
     }
 
-    private void sendNotification(int sold, OrderOuterClass.Order order){
+    private void sendNotification(int sold, Order order){
         StringBuilder sb = new StringBuilder();
-        sb.append("User ").append(user).append(" sold ").append(sold).append(" of ").append(symbol).append(".");
+        sb.append("X_User ").append(order.getUser()).append(" sold ").append(sold).append(" of ").append(symbol).append(" to ").append(user);
         publisher.sendNotification(sb.toString());
 
         Order o = Order.newBuilder()
-                .setOrderType(true)
+                .setConfirmation(false)
+                .setType(true)
                 .setQuantity(sold)
                 .setSymbol(symbol)
                 .setPrice((price + order.getPrice())/2)
@@ -23,19 +24,19 @@ public class BuyQueuedOrder extends QueuedOrder {
         Publisher.notifyUser(o);
 
         o.toBuilder()
-                .setOrderType(false)
+                .setType(false)
                 .setUser(o.getUser()).build();
         Publisher.notifyUser(o);
     }
 
 
     @Override
-    public int match(OrderOuterClass.Order order) {
+    public int match(Order order, PriceStats priceStats) {
 
         int quantity_sold;
 
         // Verifica se o preço de venda é maior que de compra. Se for, não se efetua.
-        if (order.getPrice() > this.price || this.quantity == 0)
+        if (order.getPrice() > this.price)
             return 0;
 
         if (order.getQuantity() > this.quantity){
@@ -47,6 +48,7 @@ public class BuyQueuedOrder extends QueuedOrder {
         }
 
         sendNotification(quantity_sold, order);
+        priceStats.checkValue((price + order.getPrice())/2);
 
         return quantity_sold;
     }

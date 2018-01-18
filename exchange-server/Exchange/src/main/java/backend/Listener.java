@@ -1,19 +1,20 @@
 package backend;
 
-import data.Database;
 import rest.RESTClient;
-import rest.core.Exchange;
+import data.Company;
 
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalTime;
+import java.util.HashMap;
 
 public class Listener {
 
     public static void main(String[] args) throws Exception {
 
-        //Inicia Objeto de pedidos ao servidor REST
-        //RESTClient rc = new RESTClient();
+        //if(args.length != 1)
+        //    System.out.println("Market argument is missing or incorrect.");
+        //String type = args[0];
 
         //Exchange e = rc.getExchange(args[0]);
         //int port = Integer.parseInt(e.getAddr().split(":")[1]);
@@ -21,21 +22,23 @@ public class Listener {
 
         ServerSocket svSocket = new ServerSocket(3001);
 
-        // Inicia Thread que irá publicar exchanges efetuadas
+        // Inicia Thread que irá publicar exch  anges efetuadas
         Publisher publisher = new Publisher();
         publisher.start();
 
-        Database db = new Database(publisher);
+        RESTClient rest = new RESTClient();
+        HashMap<String, Company> companies = new HashMap<>();
 
-        boolean submited = false;
+        //rest.core.Company[] cs = rest.getCompanyNames(type);
+        //for(rest.core.Company c: cs)
+        //    companies.put(c.getName(), new Company(publisher, rest));
 
-        while (true) { // TODO: introduzir horas
-            while (true) {
-                Socket socket = svSocket.accept();
-                (new Handler(socket, db, publisher)).start();
-            }
+        companies.put("MERDA", new Company(publisher, rest));
+        companies.put("FEZES", new Company(publisher, rest));
+
+        while (true) {
+            Socket socket = svSocket.accept();
+            (new Handler(socket, companies)).start();
         }
-
-
     }
 }

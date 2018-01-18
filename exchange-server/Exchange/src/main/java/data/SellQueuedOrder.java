@@ -1,8 +1,7 @@
 package data;
 
 import backend.Publisher;
-
-import static data.OrderOuterClass.Order;
+import data.OrderOuterClass.Order;
 
 public class SellQueuedOrder extends QueuedOrder{
 
@@ -14,11 +13,12 @@ public class SellQueuedOrder extends QueuedOrder{
     private void sendNotification(int sold, Order order){
 
         StringBuilder sb = new StringBuilder();
-        sb.append("User ").append(user).append(" sold ").append(sold).append(" of ").append(symbol).append(".");
+        sb.append("X_MERDA User ").append(user).append(" sold ").append(sold).append(" of ").append(symbol).append(" to ").append(order.getUser());
         publisher.sendNotification(sb.toString());
 
         OrderOuterClass.Order o = OrderOuterClass.Order.newBuilder()
-                .setOrderType(false)
+                .setConfirmation(false)
+                .setType(false)
                 .setQuantity(sold)
                 .setSymbol(symbol)
                 .setPrice((price + order.getPrice())/2)
@@ -26,14 +26,14 @@ public class SellQueuedOrder extends QueuedOrder{
         Publisher.notifyUser(o);
 
         o.toBuilder()
-                .setOrderType(true)
+                .setType(true)
                 .setUser(order.getUser()).build();
         Publisher.notifyUser(o);
 
     }
 
     @Override
-    public int match(OrderOuterClass.Order order) {
+    public int match(Order order, PriceStats priceStats) {
 
         int quantity_sold;
 
@@ -50,6 +50,8 @@ public class SellQueuedOrder extends QueuedOrder{
         }
 
         sendNotification(quantity_sold, order);
+        priceStats.checkValue((price + order.getPrice())/2);
+
         return quantity_sold;
     }
 }
