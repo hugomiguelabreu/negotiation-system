@@ -13,7 +13,7 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
 
-        Socket socket = new Socket("localhost",3001);
+        Socket socket = new Socket("localhost",3000);
         (new Thread(new NotificationReceiver())).start();
 //
 //<<<<<<< HEAD
@@ -53,8 +53,8 @@ public class Client {
 
         System.out.println("size = " + size);
 
-        Order or = Order.parseFrom(socket.getInputStream());
-
-        System.out.println(or);
+//        Order or = Order.parseFrom(socket.getInputStream());
+//
+//        System.out.println(or);
     }
 }

@@ -28,13 +28,13 @@ public class Handler extends Thread{
             LocalTime open = LocalTime.parse("09:00:00");
             LocalTime close = LocalTime.parse("23:00:00");
 
-            Order o = Order.parseDelimitedFrom(socket.getInputStream());
+            Order o = Order.parseFrom(socket.getInputStream());
             System.out.print("Received probuf message: \n" + "\u001B[34m" + o + "\u001B[0m");
 
             if (!LocalTime.now().isAfter(open) || !LocalTime.now().isBefore(close)) {
                 Order response = Order.newBuilder(o).setConfirmation(true).setType(false).build();
 
-                socket = new Socket("localhost", 3001);
+                this.socket = new Socket("localhost", 3001);
 
                 DataOutputStream out= new DataOutputStream(socket.getOutputStream());
                 out.write(o.getSerializedSize());
@@ -47,10 +47,10 @@ public class Handler extends Thread{
 
             Order response = Order.newBuilder(o).setConfirmation(true).setType(true).build();
 
-            socket = new Socket("localhost", 3001);
+            this.socket = new Socket("localhost", 3001);
 
             DataOutputStream out= new DataOutputStream(socket.getOutputStream());
-            out.write(o.getSerializedSize());
+            out.write(response.getSerializedSize());
             o.writeTo(socket.getOutputStream()); // escreve no socket o tamanho do pacote pq erlang
 
             response.writeTo(socket.getOutputStream());

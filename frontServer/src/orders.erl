@@ -42,14 +42,14 @@ forwarder_from_client(Socket) ->
 			Symbol = Ret#'Order'.symbol,
 			case db:select_cache(Symbol) of
 				{ok, Addr} -> 
-					io:format("ta na cache\n"),
 					List = binary:bin_to_list(Addr),
-					send_to_exchange(Data, List);
+					send_to_exchange(Data, List),
+					gen_tcp:close(Socket);
 				undefined ->
-					io:format("nao ta na cache\n"),
 					Naddr = getJson:getCompany(Symbol),
 					ListU = binary:bin_to_list(Naddr),
-					send_to_exchange(Data, ListU)
+					send_to_exchange(Data, ListU),
+					gen_tcp:close(Socket)
 					% TokensU = string:tokens(ListU, ":"),
 					% {PortU, _} = string:to_integer(lists:last(TokensU)),
 					% {ok, SockU} = gen_tcp:connect("localhost", PortU, [binary, {reuseaddr, true}]),
@@ -65,7 +65,8 @@ forwarder_from_client(Socket) ->
 forwarder_from_exchange(Socket) -> 
 	receive
 		{tcp, Socket, Data} ->
-			io:format("recebe da exchange");
+			io:format("recebe da exchange\n"),
+			gen_tcp:close(Socket);
 		{tcp_closed, _} ->
       		exit("user closed");
     	_ ->
