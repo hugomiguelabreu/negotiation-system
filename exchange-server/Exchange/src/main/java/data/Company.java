@@ -15,11 +15,11 @@ public class Company {
     private Queue<QueuedOrder> buyQueue;
     private Queue<QueuedOrder> sellQueue;
 
-    public Company(Publisher publisher, RESTClient rest) {
+    public Company(String name, Publisher publisher, RESTClient rest) {
         this.publisher = publisher;
         this.buyQueue = new LinkedList<>();
         this.sellQueue = new LinkedList<>();
-        this.priceStats = new PriceStats(rest);
+        this.priceStats = new PriceStats(name, rest);
     }
 
     public void getMatch(Order o) {

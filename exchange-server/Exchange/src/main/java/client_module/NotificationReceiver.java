@@ -11,7 +11,6 @@ public class NotificationReceiver implements Runnable {
         socket = context.socket(ZMQ.SUB);
         socket.connect("tcp://*:3002");
         socket.subscribe("X_MERDA".getBytes());
-        System.out.println("teste");
     }
 
     @Override

@@ -12,15 +12,16 @@ public class PriceStats {
     private double open;
     private double close;
 
-    public PriceStats(RESTClient rest) {
+    public PriceStats(String company, RESTClient rest) {
         this.rest = rest;
+        this.company = company;
         min = max = open = close = 0;
     }
 
     public void checkValue(double value){
         if (checkOpen(value) || checkMin(value)|| checkMax(value))
             System.out.println("Value changes detected! Sending to REST Server.");
-            //rest.setPrice(company, new PriceInfo(min,max,open,close));
+            rest.setPrice(company, new PriceInfo(min,max,open,close));
     }
 
     private boolean checkMax(double value) {

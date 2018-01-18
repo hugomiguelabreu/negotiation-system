@@ -38,11 +38,11 @@ public class Client {
 
         Order o = Order.newBuilder()
                 .setConfirmation(false)
-                .setType(false)
-                .setSymbol("MERDA")
+                .setType(true)
+                .setSymbol("Amazon")
                 .setQuantity(123)
                 .setPrice(55)
-                .setUser("CONAÇA").build();
+                .setUser("joao").build();
 
         int size = o.getSerializedSize();
 

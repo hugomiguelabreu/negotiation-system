@@ -18,7 +18,7 @@ public class Publisher extends Thread{
         toSend = new LinkedBlockingQueue<>();
         context = ZMQ.context(1);
         socket = context.socket(ZMQ.PUB);
-            socket.bind("tcp://*:3002");
+        socket.bind("tcp://*:3002");
         }
 
         public void sendNotification(String txt){

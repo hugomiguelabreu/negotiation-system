@@ -2,6 +2,7 @@ package backend;
 
 import rest.RESTClient;
 import data.Company;
+import rest.core.Exchange;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,29 +13,28 @@ public class Listener {
 
     public static void main(String[] args) throws Exception {
 
-        //if(args.length != 1)
-        //    System.out.println("Market argument is missing or incorrect.");
-        //String type = args[0];
+        if(args.length != 1)
+            System.out.println("Market argument is missing or incorrect.");
 
-        //Exchange e = rc.getExchange(args[0]);
-        //int port = Integer.parseInt(e.getAddr().split(":")[1]);
-        //System.out.println("Iniciada a Exchange " + e.getName() + " na porta " + port);
-
-        ServerSocket svSocket = new ServerSocket(3001);
+        String type = "NASDAQ";
 
         // Inicia Thread que irá publicar exch  anges efetuadas
+
         Publisher publisher = new Publisher();
         publisher.start();
 
         RESTClient rest = new RESTClient();
+        Exchange e = rest.getExchange(type);
+        int port = Integer.parseInt(e.getAddr().split(":")[1]);
+
         HashMap<String, Company> companies = new HashMap<>();
+        rest.core.Company[] cs = rest.getCompanyNames(type);
+        for(rest.core.Company c: cs)
+            companies.put(c.getName(), new Company(type, publisher, rest));
 
-        //rest.core.Company[] cs = rest.getCompanyNames(type);
-        //for(rest.core.Company c: cs)
-        //    companies.put(c.getName(), new Company(publisher, rest));
+        System.out.println(companies.keySet());
 
-        companies.put("MERDA", new Company(publisher, rest));
-        companies.put("FEZES", new Company(publisher, rest));
+        ServerSocket svSocket = new ServerSocket(3001);
 
         while (true) {
             Socket socket = svSocket.accept();
