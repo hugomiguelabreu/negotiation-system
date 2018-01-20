@@ -19,10 +19,11 @@ public class Listener implements Runnable{
                 if (o.getConfirmation())
                     System.out.println("Order for " + o.getSymbol() + " registered successfully.");
                 else
-                    System.out.println("Transition made!:\n"+ o);
+                    System.out.println("Transition made:\n"+ o);
 
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Server connection Error!");
+                System.exit(-1);
             }
         }
     }

@@ -23,10 +23,10 @@ public class BuyQueuedOrder extends QueuedOrder {
                 .setUser(user).build();
         Publisher.notifyUser(o);
 
-        o.toBuilder()
+        Order o2 =  Order.newBuilder(o)
                 .setType(false)
-                .setUser(o.getUser()).build();
-        Publisher.notifyUser(o);
+                .setUser(order.getUser()).build();
+        Publisher.notifyUser(o2);
     }
 
 
