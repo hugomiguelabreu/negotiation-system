@@ -56,7 +56,7 @@ forwarder_from_client(Socket) ->
 send_to_exchange(Data, List, Username) ->
 	Tokens = string:tokens(List, ":"),
 	{Port, _ } = string:to_integer(lists:last(Tokens)),
-	{ok, Sock} = gen_tcp:connect("localhost", Port, [binary, {reuseaddr, true}]),
+	{ok, Sock} = gen_tcp:connect("localhost", Port, [binary, {reuseaddr, true}, {packet, 1}]),
 	gen_tcp:send(Sock, Data),
 	db:insert_positions(Username, Sock).
 

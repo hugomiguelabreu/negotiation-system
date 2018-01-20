@@ -28,7 +28,7 @@ public class Handler extends Thread{
             LocalTime open = LocalTime.parse("09:00:00");
             LocalTime close = LocalTime.parse("23:00:00");
 
-            Order o = Order.parseFrom(socket.getInputStream());
+            Order o = Order.parseDelimitedFrom(socket.getInputStream());
             System.out.print("Received probuf message: \n" + "\u001B[34m" + o + "\u001B[0m");
 
             if (!LocalTime.now().isAfter(open) || !LocalTime.now().isBefore(close)) {
