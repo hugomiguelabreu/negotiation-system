@@ -42,6 +42,7 @@ public class Publisher extends Thread{
     public static void notifyUser(Order o) {
         try {
             Socket s = new Socket("localhost", 3001);
+            s.getOutputStream().write(o.getSerializedSize());
             o.writeTo(s.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();

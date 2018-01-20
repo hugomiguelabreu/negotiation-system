@@ -86,6 +86,7 @@ forwarder_from_exchange(Socket) ->
 			Username = Ret#'Order'.user,
 			case db:select_positions(Username) of
 				{ok, Sock} ->
+					io:format("manda cena para o cliente\n"),
 					gen_tcp:send(Sock, Data);
 				undefined ->
 					io:format("error to client\n")
