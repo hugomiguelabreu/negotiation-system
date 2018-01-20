@@ -46,14 +46,19 @@ public class Client {
 
         int size = o.getSerializedSize();
 
-        DataOutputStream out= new DataOutputStream(socket.getOutputStream());
-        out.write(size);
+//        DataOutputStream out= new DataOutputStream();
+        socket.getOutputStream().write(size);
 
         o.writeTo(socket.getOutputStream());
 
         System.out.println("size = " + size);
 
-//        Order or = Order.parseFrom(socket.getInputStream());
+
+        //socket.getOutputStream().close();
+
+        //socket.close();
+
+//        Order or = Order.parseDelimitedFrom(socket.getInputStream());
 //
 //        System.out.println(or);
     }
