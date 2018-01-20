@@ -33,7 +33,7 @@ public class Client {
 
         Status status = Status.VISITOR;
         Socket socket = new Socket("localhost"  , 2000);
-        (new Thread(new Listener(socket))).start();
+
 
         do{
             switch (status){
@@ -51,6 +51,7 @@ public class Client {
 
 
     private static Status loginMenu(Socket socket, String user) throws IOException {
+        (new Thread(new Listener(socket))).start();
         Scanner sc = new Scanner(System.in);
 
         System.out.println("==========================================");
@@ -263,6 +264,7 @@ public class Client {
         double price = sc.nextDouble();
 
         System.out.println("Tipo [B/S]: ");
+        sc.nextLine();
         boolean type = sc.nextLine() == "B" ? true : false;
 
         Order o = Order.newBuilder()
