@@ -26,8 +26,7 @@ getCompany(Name) ->
 										getExchange(Raw);
 		_ -> io:format("error")
 	end.
-
-
+	
 
 %%====================================================================
 %% Internal functions
@@ -147,6 +146,7 @@ getExchange(Raw) ->
 %     do_thing_arr(Props);
 % do_thing(Val)
 %     do_think_val(Val).
+
 
 % cria uma lista de com N Xs
 % repeat(X,N) ->
