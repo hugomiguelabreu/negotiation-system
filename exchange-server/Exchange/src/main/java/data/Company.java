@@ -34,8 +34,6 @@ public class Company {
         int new_qty = o.getQuantity();
 
         synchronized (orders) {
-
-
             while (new_qty > 0) {
                 QueuedOrder qo = orders.peek();
 
@@ -47,16 +45,21 @@ public class Company {
                 if (new_qty > 0)
                     orders.remove();
             }
-
-            if (new_qty > 0) {
-                System.out.println("\u001B[43m" + "[QUEUED]" + "\u001B[0m" + " Not enough quantity sold - Adding to Queue. Quantity: " + new_qty);
-
-                if (o.getType())
-                    buyQueue.add(QueuedOrder.create(o, new_qty, publisher));
-                else
-                    sellQueue.add(QueuedOrder.create(o, new_qty, publisher));
-            }
         }
+
+        if (new_qty > 0) {
+            System.out.println("\u001B[43m" + "[QUEUED]" + "\u001B[0m" + " Not enough quantity sold - Adding to Queue. Quantity: " + new_qty);
+
+            if (o.getType())
+                synchronized (buyQueue) {
+                    buyQueue.add(QueuedOrder.create(o, new_qty, publisher));
+                }
+            else
+                synchronized (sellQueue) {
+                    sellQueue.add(QueuedOrder.create(o, new_qty, publisher));
+                }
+        }
+
     }
 
 }
