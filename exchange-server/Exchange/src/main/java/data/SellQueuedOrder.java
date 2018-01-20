@@ -25,7 +25,7 @@ public class SellQueuedOrder extends QueuedOrder{
                 .setUser(user).build();
         Publisher.notifyUser(o);
 
-        o.toBuilder()
+        Order o2 =  Order.newBuilder(o)
                 .setType(true)
                 .setUser(order.getUser()).build();
         Publisher.notifyUser(o);
