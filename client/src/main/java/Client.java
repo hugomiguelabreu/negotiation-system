@@ -269,7 +269,7 @@ public class Client {
 
         System.out.println("Tipo [B/S]: ");
         sc.nextLine();
-        boolean type = sc.nextLine() == "B" ? true : false;
+        boolean type = sc.nextLine().equals("B")? true : false;
 
         Order o = Order.newBuilder()
                     .setConfirmation(false)
