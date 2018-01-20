@@ -26,9 +26,14 @@ public class Client {
     }
 
     public static void main(String[] args) throws IOException {
+
+        rc = new RESTClient();
+        sb = new Subscriber();
+        (new Thread(sb)).start();
+
         Status status = Status.VISITOR;
         Socket socket = new Socket("localhost"  , 2000);
-        //(new Thread(new Listener(socket))).start();
+        (new Thread(new Listener(socket))).start();
 
         do{
             switch (status){
@@ -189,13 +194,13 @@ public class Client {
         System.out.println("---- Register ----");
 
         System.out.print("Username: ");
-        String username = sc.nextLine();
+        String usr = sc.nextLine();
 
         System.out.print("Password: ");
         String password = sc.nextLine();
 
         Account acc = Account.newBuilder()
-                .setUsername(username)
+                .setUsername(usr)
                 .setPassword(password)
                 .setType(true).build();
 
@@ -205,9 +210,10 @@ public class Client {
         Response rep = Response.parseDelimitedFrom(socket.getInputStream());
         boolean b = rep.getRep();
 
-        if(b)
+        if(b) {
             System.out.println("--- Registo bem sucedido ----");
-        else
+            username = usr;
+        } else
             System.out.println("--- Username inválido ---");
 
         return b;
@@ -219,13 +225,13 @@ public class Client {
         System.out.println("---- Login ----");
 
         System.out.print("Username: ");
-        String username = sc.nextLine();
+        String usr = sc.nextLine();
 
         System.out.print("Password: ");
         String password = sc.nextLine();
 
         Account acc = Account.newBuilder()
-                .setUsername(username)
+                .setUsername(usr)
                 .setPassword(password)
                 .setType(false).build();
 
@@ -235,9 +241,10 @@ public class Client {
         Response rep = Response.parseDelimitedFrom(socket.getInputStream());
         boolean b = rep.getRep();
 
-        if(b)
+        if(b) {
             System.out.println("--- Login bem sucedido ----");
-        else
+            username = usr;
+        } else
             System.out.println("--- Login inválido ---");
 
         return b;
