@@ -31,7 +31,7 @@ public class Subscriber extends Thread{
         }
 
         if(!subscriptions.contains(company)){
-            socket.subscribe((company + "::").getBytes());
+            socket.subscribe((company + "_").getBytes());
             subscriptions.add(company);
         }
     }
@@ -49,7 +49,7 @@ public class Subscriber extends Thread{
             byte[] b = socket.recv();
             String r = new String(b);
 
-            System.out.println("\u001B[36m" + r + "\u001B[0m");
+            System.out.println("\u001B[36m" + r.substring(r.indexOf("_")+1).trim() + "\u001B[0m");
 
         }
 

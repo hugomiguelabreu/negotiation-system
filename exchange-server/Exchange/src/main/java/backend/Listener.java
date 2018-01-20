@@ -19,10 +19,7 @@ public class Listener {
         String type = "NASDAQ";
 
         // Inicia Thread que irá publicar exch  anges efetuadas
-        System.out.print("> Starting publisher...");
-        Publisher publisher = new Publisher();
-        publisher.start();
-        System.out.print("\u001B[32m DONE!\u001B[0m\n");
+
 
         System.out.print("> Connecting to the REST Server...");
         RESTClient rest = new RESTClient();
@@ -30,6 +27,12 @@ public class Listener {
 
         Exchange e = rest.getExchange(type);
         int port = Integer.parseInt(e.getAddr().split(":")[1]);
+        int port_pub = port + 1;
+
+        System.out.print("> Starting publisher on port " + port_pub + "...");
+        Publisher publisher = new Publisher(port + 1);
+        publisher.start();
+        System.out.print("\u001B[32m DONE!\u001B[0m\n");
 
         HashMap<String, Company> companies = new HashMap<>();
         rest.core.Company[] cs = rest.getCompanyNames(type);

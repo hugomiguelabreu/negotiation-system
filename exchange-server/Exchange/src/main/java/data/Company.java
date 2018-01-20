@@ -48,7 +48,7 @@ public class Company {
         }
 
         if (new_qty > 0) {
-            System.out.println("\u001B[43m" + "[QUEUED]" + "\u001B[0m" + " Not enough quantity sold - Adding to Queue. Quantity: " + new_qty);
+            System.out.println("\u001B[43m" + "[QUEUED]" + "\u001B[0m" + " Not enough quantity sold/bought - Adding to Queue. Quantity: " + new_qty);
 
             if (o.getType())
                 synchronized (buyQueue) {

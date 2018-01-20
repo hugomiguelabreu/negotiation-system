@@ -14,11 +14,11 @@ public class Publisher extends Thread{
     private ZMQ.Context context;
     private ZMQ.Socket socket;
 
-    public Publisher() {
+    public Publisher(int port) {
         toSend = new LinkedBlockingQueue<>();
         context = ZMQ.context(1);
         socket = context.socket(ZMQ.PUB);
-        socket.bind("tcp://*:3002");
+        socket.bind("tcp://:" + port);
         }
 
         public void sendNotification(String txt){
