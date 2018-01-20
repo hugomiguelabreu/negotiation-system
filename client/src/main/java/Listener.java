@@ -15,7 +15,7 @@ public class Listener implements Runnable{
         while(true){
             try {
 
-                Order o = Order.parseFrom(socket.getInputStream());
+                Order o = Order.parseDelimitedFrom(socket.getInputStream());
                 if (o.getConfirmation())
                     System.out.println("Order for " + o.getSymbol() + " registered successfully.");
                 else

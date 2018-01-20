@@ -40,12 +40,13 @@ forwarder_from_client(Socket) ->
 			case db:select_cache(Symbol) of
 				{ok, Addr} -> 
 					List = binary:bin_to_list(Addr),
-					send_to_exchange(Data, List, Username);
+					send_to_exchange(Data, List);
 				undefined ->
 					Naddr = getJson:getCompany(Symbol),
 					ListU = binary:bin_to_list(Naddr),
-					send_to_exchange(Data, ListU, Username)
+					send_to_exchange(Data, ListU)
 			end,
+			db:insert_positions(Username, Socket),
 			forwarder_from_client(Socket);
 		{tcp_closed, _} ->
       		io:format("user closed\n");
@@ -53,12 +54,11 @@ forwarder_from_client(Socket) ->
       		io:format("error\n")
 	end.
 
-send_to_exchange(Data, List, Username) ->
+send_to_exchange(Data, List) ->
 	Tokens = string:tokens(List, ":"),
 	{Port, _ } = string:to_integer(lists:last(Tokens)),
 	{ok, Sock} = gen_tcp:connect("localhost", Port, [binary, {reuseaddr, true}, {packet, 1}]),
-	gen_tcp:send(Sock, Data),
-	db:insert_positions(Username, Sock).
+	gen_tcp:send(Sock, Data).
 
 
 %%====================================================================
@@ -79,7 +79,7 @@ acceptor_from_exchange(LSock) ->
 	spawn(fun() -> acceptor_from_exchange(LSock) end),
 	forwarder_from_exchange(Sock).
 
-forwarder_from_exchange(Socket) -> 
+forwarder_from_exchange(Socket) ->
 	receive
 		{tcp, Socket, Data} ->
 			Ret = order:decode_msg(Data, 'Order'),

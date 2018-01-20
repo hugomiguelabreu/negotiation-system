@@ -42,7 +42,7 @@ public class Client {
                     break;
                 case LOGGED:
                     socket = new Socket("localhost"  , 3000);
-                    (new Thread(new Listener(socket))).start();
+                    //(new Thread(new Listener(socket))).start();
                     status = loginMenu(socket, username);
                     break;
             }
