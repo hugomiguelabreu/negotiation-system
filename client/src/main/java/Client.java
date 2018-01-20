@@ -33,7 +33,7 @@ public class Client {
 
         Status status = Status.VISITOR;
         Socket socket = new Socket("localhost"  , 2000);
-        (new Thread(new Listener(socket))).start();
+        //(new Thread(new Listener(socket))).start();
 
         do{
             switch (status){

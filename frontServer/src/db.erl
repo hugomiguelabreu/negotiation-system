@@ -1,11 +1,11 @@
 -module(db).
 
 % o primeiro atributo do record e a Key
--record(users, {username, password, logedIn}).
+-record(users, {username, password}).
 -record(cache, {id, address}).
 -record(positions, {username, socket}).
 
--export ([init/0, start/0, stop/0, login/2, logout/2, register/2, insert_cache/2, select_cache/1, insert_positions/2, select_positions/1]).
+-export ([init/0, start/0, stop/0, login/2, register/2, insert_cache/2, select_cache/1, insert_positions/2, select_positions/1]).
 
 %%====================================================================
 %% start mnesia
@@ -34,10 +34,9 @@ stop() ->
 login(Username, Password) ->
 	F = fun() ->
 		case mnesia:wread({users, Username}) of
-			[#users{password = Password, logedIn = false}] ->
+			[#users{password = Password}] ->
 				mnesia:write(#users{username = Username,
-						   			password = Password,
-						   			logedIn = true}),
+						   			password = Password}),
 				ok;
 			_ -> 
 				io:format("pass ou men errados\n"),
@@ -46,17 +45,17 @@ login(Username, Password) ->
 	end,
 	mnesia:activity(transaction, F).
 
-logout(Username, Password) ->
-	F = fun() ->
-		case mnesia:wread({users, Username}) of
-			[#users{password = Password, logedIn = true}] ->
-				mnesia:write(#users{username = Username,
-						   			password = Password,
-						   			logedIn = false});
-			_ -> io:format("error\n")
-		end
-	end,
-	mnesia:activity(transaction, F).
+% logout(Username, Password) ->
+% 	F = fun() ->
+% 		case mnesia:wread({users, Username}) of
+% 			[#users{password = Password, logedIn = true}] ->
+% 				mnesia:write(#users{username = Username,
+% 						   			password = Password,
+% 						   			logedIn = false});
+% 			_ -> io:format("error\n")
+% 		end
+% 	end,
+% 	mnesia:activity(transaction, F).
 
 register(Username, Password) ->
 	F = fun() ->
@@ -66,8 +65,7 @@ register(Username, Password) ->
 				undefined;
 			_ -> 
 				mnesia:write(#users{username = Username,
-						   			password = Password,
-						   			logedIn = false}),
+						   			password = Password}),
 				ok
 		end
 	end,
