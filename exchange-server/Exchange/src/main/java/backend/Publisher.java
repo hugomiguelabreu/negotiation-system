@@ -41,7 +41,7 @@ public class Publisher extends Thread{
     //TODO: REVERIFICAR A PORTA DE RESPOSTA
     public static void notifyUser(Order o) {
         try {
-            Socket s = new Socket("localhost", 3002);
+            Socket s = new Socket("localhost", 3001);
             o.writeTo(s.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
