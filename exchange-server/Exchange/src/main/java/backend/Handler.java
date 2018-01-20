@@ -49,11 +49,9 @@ public class Handler extends Thread{
 
             this.socket = new Socket("localhost", 3001);
 
-            DataOutputStream out= new DataOutputStream(socket.getOutputStream());
-            out.write(response.getSerializedSize());
-            o.writeTo(socket.getOutputStream()); // escreve no socket o tamanho do pacote pq erlang
-
+            socket.getOutputStream().write(response.getSerializedSize());
             response.writeTo(socket.getOutputStream());
+
             System.out.println("\u001B[42m" + "[SUCCESS]" + "\u001B[0m" + " Positive confirmation sent.");
 
             companies.get(o.getSymbol()).getMatch(o);
