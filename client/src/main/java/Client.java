@@ -28,7 +28,7 @@ public class Client {
     public static void main(String[] args) throws IOException {
         Status status = Status.VISITOR;
         Socket socket = new Socket("localhost"  , 2000);
-        (new Thread(new Listener(socket))).start();
+        //(new Thread(new Listener(socket))).start();
 
         do{
             switch (status){
@@ -36,6 +36,8 @@ public class Client {
                     status = visitorMenu(socket);
                     break;
                 case LOGGED:
+                    socket = new Socket("localhost"  , 3000);
+                    (new Thread(new Listener(socket))).start();
                     status = loginMenu(socket, username);
                     break;
             }
@@ -138,7 +140,7 @@ public class Client {
 
                 break;
 
-            case 8:
+            case 7:
                 createPosition(socket,user);
                 break;
 
@@ -196,9 +198,11 @@ public class Client {
                 .setUsername(username)
                 .setPassword(password)
                 .setType(true).build();
+
+        socket.getOutputStream().write(acc.getSerializedSize());
         acc.writeTo(socket.getOutputStream());
 
-        Response rep = Response.parseFrom(socket.getInputStream());
+        Response rep = Response.parseDelimitedFrom(socket.getInputStream());
         boolean b = rep.getRep();
 
         if(b)
@@ -224,9 +228,11 @@ public class Client {
                 .setUsername(username)
                 .setPassword(password)
                 .setType(false).build();
+
+        socket.getOutputStream().write(acc.getSerializedSize());
         acc.writeTo(socket.getOutputStream());
 
-        Response rep = Response.parseFrom(socket.getInputStream());
+        Response rep = Response.parseDelimitedFrom(socket.getInputStream());
         boolean b = rep.getRep();
 
         if(b)
@@ -260,6 +266,7 @@ public class Client {
                     .setPrice(price)
                     .setUser(user).build();
 
+        s.getOutputStream().write(o.getSerializedSize());
         o.writeTo(s.getOutputStream());
     }
 
