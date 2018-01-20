@@ -86,6 +86,7 @@ public class Client {
 
             case 3:
                 System.out.println("ID da empresa: ");
+                sc.nextLine();
                 Company c = rc.getCompany(sc.nextLine());
 
                 if (c!=null) {
@@ -100,6 +101,7 @@ public class Client {
 
             case 4:
                 System.out.println("ID da empresa: ");
+                sc.nextLine();
                 String cId = sc.nextLine();
                 PriceInfo pt = rc.getPrice(cId, 0); // Preço de Hoje
                 PriceInfo py = rc.getPrice(cId, 1); // Preço de Ontem
@@ -127,6 +129,7 @@ public class Client {
             case 5:
 
                 System.out.println("ID da empresa a subscrever:");
+                sc.nextLine();
                 Company cSub = rc.getCompany(sc.nextLine());
 
                 if (cSub!=null)
@@ -137,6 +140,7 @@ public class Client {
                 break;
             case 6:
                 System.out.println("ID da empresa para remover subscrição:");
+                sc.nextLine();
                 Company cUnSub = rc.getCompany(sc.nextLine());
 
                 if (cUnSub!=null)
