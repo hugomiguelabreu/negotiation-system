@@ -67,18 +67,35 @@ Para projetar o servidor de directório, ou seja, o servidor que contém todos o
 \begin{itemize}
 \item GET
   \begin{itemize}
-    \item /companies
+    \item \textbf{/companies}
     \par Este \textit{end-point} devolve uma lista com todas as empresas existentes no sistema. A lista devolvida é uma lista de objetos e, portanto, contém todos os atributos intrínsecos a cada empresa na enumeração.
-    \item /company/{id}
-    \item /company/{id}/today
-    \item /company/{id}/yesterday
-    \item /exchange/{id}
-    \item /exchange/{id}/companies
-    \item /exchanges
+    
+    \item \textbf{/company/{id}}
+    \par Este recurso, quando fornecido um correcto id de empresa, a respetiva empresa, caso esta se encontre efetivamente no sistema. Neste recuso é devolvida a empresa e todos os atributos a esta relacionados.
+    
+    \item \textbf{/company/{id}/today}
+    \par O \textit{end-point} descrito neste ponto, devolve a informação de preços do dia corrente, sendo que, esta informação também é devolvida no recurso anterior, desta forma, caso apenas seja necessário obter os preços, é possível reduzir a quantidade de informação que circula na rede.
+    
+    \item \textbf{/company/{id}/yesterday}
+    \par Da mesma forma que o recurso mencionado anteriormente retorna os preços do dia atual, este recurso retorna os preços do dia anterior.
+    
+    \item \textbf{/exchanges}
+    \par Este \textit{end-point} devolve uma lista com todas as exchanges existentes no sistema. A lista devolvida é, tal como nas empresas, uma lista de objetos e, portanto, contém todos os atributos intrínsecos a cada exchange na enumeração.
+
+    \item \textbf{/exchange/{id}}
+    \par Quando o recurso descrito é acedido, ao fornecer um id de exchange válido, este recurso devolve a dita exchange com todos os astributos a ela relacionados, como por exemplo, o IP+Porta.
+
+    \item \textbf{/exchange/{id}/companies}
+    \par Este \textit{end-point} devolve uma lista com todas as empresas existentes no sistema. A lista devolvida é uma lista de objetos e, portanto, contém todos os atributos intrínsecos a cada empresa na enumeração.
+    
+    
   \end{itemize}
 \item PUT
+  \par Os recursos definidos como PUT, deverão ser idempotentes, ou seja, por muitas vezes que o recurso seja executado, o resultado é o mesmo e, portanto, é a operação ideal para, neste caso, o recurso listado abaixo.
   \begin{itemize}
-    \item /company/{id}/today
+    \item \textbf{/company/{id}/today}
+
+    \par FALTA
   \end{itemize}
 \end{itemize}
 
