@@ -86,6 +86,9 @@ public class PriceStats {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
+        if (calendar.getTimeInMillis() - System.currentTimeMillis() < 0)
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+
         Date alarmTime = calendar.getTime();
         //Now create the time and schedule it
         Timer timer = new Timer();
