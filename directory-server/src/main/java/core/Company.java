@@ -21,8 +21,8 @@ public class Company {
         this.exchange = exchange;
 
 
-        this.today = new PriceInfo(10, 10, 10, 10);
-        this.yesterday = new PriceInfo(12, 15, 15.7, 17.8);
+        this.today = new PriceInfo(0, 0, 0, 0);
+        this.yesterday = new PriceInfo(0, 0, 0, 0);
     }
 
     @JsonProperty
