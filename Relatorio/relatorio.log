@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.19)  23 JAN 2018 10:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.19)  23 JAN 2018 10:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -890,9 +890,9 @@ Package Fancyhdr Warning: \headheight is too small (13.6pt):
  This may cause the page layout to be inconsistent, however.
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 105.
+(babel)             in language  on input line 101.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 105.
+(babel)             in language  on input line 101.
 [2]
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 106.
@@ -934,7 +934,7 @@ b></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/
 fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/c
 m-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm2074.pfb
 ></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb>
-Output written on relatorio.pdf (3 pages, 139473 bytes).
+Output written on relatorio.pdf (3 pages, 139738 bytes).
 PDF statistics:
  84 PDF objects out of 1000 (max. 8388607)
  70 compressed objects within 1 object stream

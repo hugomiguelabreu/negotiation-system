@@ -63,7 +63,7 @@ O seguinte trabalho prático advém da necessidade de aplicação e consequente 
 \section{Exchange Server}
 
 \section{Directory Server}
-Para projetar o servidor de directório, ou seja, o servidor que contém todos os meta-dados relativos ao sistema de negociação, portanto, esta entidade do sistema mantém dados como, que empreas existem, em que exchange são transacionadas, que exchanges existem e que empresas têm e, os diferentes preços diários das empresas em questão.
+Para projetar o servidor de directório, ou seja, o servidor que contém todos os meta-dados relativos ao sistema de negociação, portanto, esta entidade do sistema mantém dados como, que empreas existem, em que exchange são transacionadas, que exchanges existem e que empresas têm e, os diferentes preços diários das empresas em questão. A utilização de um servidor REST para este tipo de acesso a dados, é o mais correto, visto que não existe a necessidade de manter estado entre pedidos e, desta forma, faz com que um só servidor consiga suportar muitos utilizadores em simultâneo.
 \par O servidor construído, tal como requirido pelo docente no enunciado, é um servidor REST, stateless, programado em Java com recuros a framework Dropwizard. Para ser possível garantir o acesso a todos os recursos que o serviço oferece, foi necessário definir \textit{end-points} para obter e/ou atualizar esses mesmos recursos. Os \textit{end-points} definidos para o servidor REST foram os seguintes:
 
 \begin{itemize}
