@@ -21,8 +21,8 @@
 \usepackage{color}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
-\lhead{FSD}
-\rhead{Universidade do Minho - Departamento de Informática}
+\lhead{Universidade do Minho - Departamento de Informática}
+\rhead{}
 
 \setlength{\headheight}{13.6pt}
 
@@ -46,7 +46,7 @@
 
 \title{Sistema de negociação}
 \author{Hugo Abreu | A76203 \and João Padrão | A76438\and João Reis | A75372
-\\\\ \includegraphics[scale=0.25]{um_eeng} \\ \textbf{Universidade do Minho}}
+\\\\ Paradigmas de Sistemas Distribuídos \\ \textbf{Universidade do Minho} \\ \\ \includegraphics[scale=0.25]{um_eeng}}
 
 
 \begin{document}
@@ -61,6 +61,8 @@ O seguinte trabalho prático advém da necessidade de aplicação e consequente 
 \section{Front-end Server}
 
 \section{Exchange Server}
+
+**FALAR DO TIMER PARA O CLOSE**
 
 \section{Directory Server}
 Para projetar o servidor de directório, ou seja, o servidor que contém todos os meta-dados relativos ao sistema de negociação, portanto, esta entidade do sistema mantém dados como, que empreas existem, em que exchange são transacionadas, que exchanges existem e que empresas têm e, os diferentes preços diários das empresas em questão. A utilização de um servidor REST para este tipo de acesso a dados, é o mais correto, visto que não existe a necessidade de manter estado entre pedidos e, desta forma, faz com que um só servidor consiga suportar muitos utilizadores em simultâneo.
@@ -97,11 +99,12 @@ Para projetar o servidor de directório, ou seja, o servidor que contém todos o
   \begin{itemize}
     \item \textbf{/company/{id}/today}
 
-    \par Este recurso tem como objetivo atualizar os preços atuais de uma dada empresa e, portanto é uma operação idempotente visto que, o resultado é sempre o mesmo descartando a quantidade de vezes que é executado. Este recurso também se encontra responsável por verificar a necessidade de trocar os valores, ou seja, verificar se já é um dia diferente e portanto tocar os valores para os dias corretos.
+    \par Este recurso tem como objetivo atualizar os preços atuais de uma dada empresa e, portanto é uma operação idempotente visto que, o resultado é sempre o mesmo não importando a quantidade de vezes que é executado.
   \end{itemize}
 \end{itemize}
 
 \par Todos os recursos abordados acima foram corretamente implementados e a sua executção foi efetivamente testada, o grupo teve o cuidado de utilizar as primitivas da framework Jackson para permitir a correcta serialização dos dados.
+\par Foi também adicionada a funcionalidade ao REST server de às 23:59:59 de cada dia, executar a alteração diária, ou seja, às horas definidas, é accionado um \textit{trigger} que vai a todas as empresas trocar os preços actuais para o dia anterior, garantindo assim a atualização das informações no directório.
 
 \section{Client}
 Para permitir o acesso às funcionalidades completas da Exchange e todos os recursos do eco-sistema associado, foi construído um Client que visa a utilização por utilizadores ditos normais.
