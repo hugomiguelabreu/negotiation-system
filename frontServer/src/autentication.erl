@@ -47,6 +47,7 @@ aut(Sock) ->
 							io:format("registo efetuado com sucesso\n"),
 							Msg = response:encode_msg(#'Response'{rep=true}),
 			        		gen_tcp:send(Sock, Msg),
+			        		db:insert_mailbox(Username, []),
 			        		aut(Sock);
 			        	undefined ->
 			        		io:format("Registo falhou\n"),
@@ -59,7 +60,8 @@ aut(Sock) ->
 			    		ok ->
 			    			io:format("login efetuado com sucesso\n"),
 			        		Msg = response:encode_msg(#'Response'{rep=true}),
-			        		gen_tcp:send(Sock, Msg);
+			        		gen_tcp:send(Sock, Msg),
+			        		send_mailbox(Sock, Username);
 			        	undefined ->
 			        		io:format("login falhou\n"),
 			        		Msg = response:encode_msg(#'Response'{rep=false}),
@@ -71,4 +73,16 @@ aut(Sock) ->
 			io:format("closed\n");
 		_ ->
 		 	io:format("error\n")
+	end.
+
+send_mailbox(Socket, Username) ->
+	case db:select_mailbox(Username) of
+		noMsgs ->
+			gen_tcp:send(Socket, "lixo");
+		{ok, List} ->
+			Fun = fun(Elem) -> gen_tcp:send(Socket, Elem) end,
+			lists:foreach(Fun, List);
+		undefined ->
+			gen_tcp:send(Socket, "lixo"),
+			db:insert_mailbox(Username, [])
 	end.

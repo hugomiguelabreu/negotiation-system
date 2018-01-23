@@ -1,4 +1,5 @@
 import data.OrderOuterClass.Order;
+import data.UpdateOuterClass;
 import protobuff.account.AccountOuterClass.Account;
 import protobuff.response.ResponseOuterClass.Response;
 import rest.RESTClient;
@@ -52,6 +53,18 @@ public class Client {
 
     private static Status loginMenu(Socket socket, String user) throws IOException {
         (new Thread(new Listener(socket))).start();
+
+        //update socket no erlang ---------------------------------------
+
+        UpdateOuterClass.Update up = UpdateOuterClass.Update.newBuilder()
+                .setUser(user)
+                .build();
+
+        socket.getOutputStream().write(up.getSerializedSize());
+        up.writeTo(socket.getOutputStream());
+
+        //update socket no erlang ---------------------------------------
+
         Scanner sc = new Scanner(System.in);
 
         System.out.println("==========================================");
@@ -249,8 +262,26 @@ public class Client {
         if(b) {
             System.out.println("--- Login bem sucedido ----");
             username = usr;
-        } else
+        } else{
             System.out.println("--- Login inválido ---");
+            return b;
+        }
+
+        boolean moreProtos = true;
+
+        while(moreProtos){
+
+            try {
+
+                Order o = Order.parseDelimitedFrom(socket.getInputStream());
+                o.getType();
+                System.out.println("Transition made:\n"+ o);
+
+            }catch (Exception e){
+                System.out.println("--- no new messages ---");
+                moreProtos = false;
+            }
+        }
 
         return b;
     }
