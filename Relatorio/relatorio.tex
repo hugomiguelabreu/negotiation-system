@@ -62,6 +62,26 @@ O seguinte trabalho prático advém da necessidade de aplicação e consequente 
 
 \section{Exchange Server}
 
+\par De modo a processar ordens recebidas, foi necessário implementar um servidor que efetua transações para um para um dado mercado - \textit{PSI20}, \textit{NADAQ}, etc – o que implica que existirá várias instancias deste tipo de servidor a executar. Caberá, portanto, ao \textit{front-server}, assim que recebe uma ordem, averiguar qual o mercado onde uma empresa se encontra e redirecionar para o servidor correto. 
+
+\par Para iniciar um servidor \textit{Exchange}, é necessário indicar sobre parâmetro qual o mercado onde irá operar de modo a obter as informações necessárias via REST. Dada cada empresa recebida, é criado um objeto \textit{Company} que conterá queues de ordens de compra e venda, que não foram de imediato efetuadas uma transação. Está associado também um objeto \textit{PriceInfo}, que contem os preços de abertura, fecho, máximo e mínimo. Sempre que uma transação é efetuada, este verifica com os valores contidos se existem alterações, e se conferir, é enviado ao servidor REST.
+
+\par Este conjunto de objectos encontram-se agregados num mapa que será acedido por todas as conexões. 
+
+\par Entre essas informações obtidas, encontra-se também a porta onde irá escutar novas conexões do provenientes do \textit{front-server}. É também iniciado um \textit{Publisher} implementado em ZeroMQ, que publica informação sempre que uma transação é efetuada.
+
+\par Estando, portanto, à escuta de novas conexões, estas originam um novo \textit{Handler} que recebe um \textit{protobuff order}. Se hora de receção estiver entre as 9:00 e 17:00 é replicado o \textit{protobuff} recebido, indicando desta vez uma confirmação positiva e enviado para o socket, processando o pedido posteriormente. Caso contrário, envia-se apendas uma confirmação negativa.
+
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=1\textwidth]{d1.PNG}
+  \caption{Aceitação de conexões}
+\end{figure}
+
+\par A \textit{protobuff} order recebida é encaminhada para o objeto correspondente à empresa a que diz respeito. Consoante o tipo de order – compra ou venda – confere-se na contrária queue se existem outras que correspondam de modo a efetuar uma transação. No fim, se ainda existir quantidade por vender, é também colocada em queue.
+\par Sempre que uma transação é efetuada, são enviados a ambos intervenientes (via \textit{front-server}, que estará à escuta na porta 3001) uma confirmação usando novamente uma protobuff order com a quantidade transacionada, assim como o preço a que foi feita.  É também enviado ao publisher uma mensagem para anunciar a transação entre os dois utilizadores, bem como a quantidade e o preço.  
+
+
 **FALAR DO TIMER PARA O CLOSE**
 
 \section{Directory Server}
