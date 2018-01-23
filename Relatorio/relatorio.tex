@@ -86,7 +86,7 @@ Para projetar o servidor de directório, ou seja, o servidor que contém todos o
     \par Quando o recurso descrito é acedido, ao fornecer um id de exchange válido, este recurso devolve a dita exchange com todos os astributos a ela relacionados, como por exemplo, o IP+Porta.
 
     \item \textbf{/exchange/{id}/companies}
-    \par Este \textit{end-point} devolve uma lista com todas as empresas existentes no sistema. A lista devolvida é uma lista de objetos e, portanto, contém todos os atributos intrínsecos a cada empresa na enumeração.
+    \par Este \textit{end-point} devolve uma lista com todas as empresas da exchange que é fornecida como argumento (id). A lista devolvida é uma lista de objetos e, portanto, contém todos os atributos intrínsecos a cada empresa.
     
     
   \end{itemize}
@@ -95,7 +95,7 @@ Para projetar o servidor de directório, ou seja, o servidor que contém todos o
   \begin{itemize}
     \item \textbf{/company/{id}/today}
 
-    \par FALTA
+    \par Este recurso tem como objetivo atualizar os preços atuais de uma dada empresa e, portanto é uma operação idempotente visto que, o resultado é sempre o mesmo descartando a quantidade de vezes que é executado. Este recurso também se encontra responsável por verificar a necessidade de trocar os valores, ou seja, verificar se já é um dia diferente e portanto tocar os valores para os dias corretos.
   \end{itemize}
 \end{itemize}
 
