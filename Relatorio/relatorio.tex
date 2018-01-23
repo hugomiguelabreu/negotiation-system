@@ -74,15 +74,13 @@ O seguinte trabalho prático advém da necessidade de aplicação e consequente 
 
 \begin{figure}[h]
   \centering
-      \includegraphics[width=1\textwidth]{d1.PNG}
+      \includegraphics[width=1\textwidth]{d1.png}
   \caption{Aceitação de conexões}
 \end{figure}
 
 \par A \textit{protobuff} order recebida é encaminhada para o objeto correspondente à empresa a que diz respeito. Consoante o tipo de order – compra ou venda – confere-se na contrária queue se existem outras que correspondam de modo a efetuar uma transação. No fim, se ainda existir quantidade por vender, é também colocada em queue.
 \par Sempre que uma transação é efetuada, são enviados a ambos intervenientes (via \textit{front-server}, que estará à escuta na porta 3001) uma confirmação usando novamente uma protobuff order com a quantidade transacionada, assim como o preço a que foi feita.  É também enviado ao publisher uma mensagem para anunciar a transação entre os dois utilizadores, bem como a quantidade e o preço.  
-
-
-**FALAR DO TIMER PARA O CLOSE**
+\par Houve a necessidade de criar um \textit{trigger} para que, aquando do fecho da exchange, o preço da última transação fosse atualizado no directório, desta forma, às 17:00 de cada dia, este timer é executado de maneira a enviar a última atualização diária no que toca ao preço de cada empresa transacionada.
 
 \section{Directory Server}
 Para projetar o servidor de directório, ou seja, o servidor que contém todos os meta-dados relativos ao sistema de negociação, portanto, esta entidade do sistema mantém dados como, que empreas existem, em que exchange são transacionadas, que exchanges existem e que empresas têm e, os diferentes preços diários das empresas em questão. A utilização de um servidor REST para este tipo de acesso a dados, é o mais correto, visto que não existe a necessidade de manter estado entre pedidos e, desta forma, faz com que um só servidor consiga suportar muitos utilizadores em simultâneo.
@@ -94,22 +92,22 @@ Para projetar o servidor de directório, ou seja, o servidor que contém todos o
     \item \textbf{/companies}
     \par Este \textit{end-point} devolve uma lista com todas as empresas existentes no sistema. A lista devolvida é uma lista de objetos e, portanto, contém todos os atributos intrínsecos a cada empresa na enumeração.
     
-    \item \textbf{/company/{id}}
+    \item \textbf{/company/\{id\}}
     \par Este recurso, quando fornecido um correcto id de empresa, a respetiva empresa, caso esta se encontre efetivamente no sistema. Neste recuso é devolvida a empresa e todos os atributos a esta relacionados.
     
-    \item \textbf{/company/{id}/today}
+    \item \textbf{/company/\{id\}/today}
     \par O \textit{end-point} descrito neste ponto, devolve a informação de preços do dia corrente, sendo que, esta informação também é devolvida no recurso anterior, desta forma, caso apenas seja necessário obter os preços, é possível reduzir a quantidade de informação que circula na rede.
     
-    \item \textbf{/company/{id}/yesterday}
+    \item \textbf{/company/\{id\}/yesterday}
     \par Da mesma forma que o recurso mencionado anteriormente retorna os preços do dia atual, este recurso retorna os preços do dia anterior.
     
     \item \textbf{/exchanges}
     \par Este \textit{end-point} devolve uma lista com todas as exchanges existentes no sistema. A lista devolvida é, tal como nas empresas, uma lista de objetos e, portanto, contém todos os atributos intrínsecos a cada exchange na enumeração.
 
-    \item \textbf{/exchange/{id}}
+    \item \textbf{/exchange/\{id\}}
     \par Quando o recurso descrito é acedido, ao fornecer um id de exchange válido, este recurso devolve a dita exchange com todos os astributos a ela relacionados, como por exemplo, o IP+Porta.
 
-    \item \textbf{/exchange/{id}/companies}
+    \item \textbf{/exchange/\{id\}/companies}
     \par Este \textit{end-point} devolve uma lista com todas as empresas da exchange que é fornecida como argumento (id). A lista devolvida é uma lista de objetos e, portanto, contém todos os atributos intrínsecos a cada empresa.
     
     
@@ -117,7 +115,7 @@ Para projetar o servidor de directório, ou seja, o servidor que contém todos o
 \item PUT
   \par Os recursos definidos como PUT, deverão ser idempotentes, ou seja, por muitas vezes que o recurso seja executado, o resultado é o mesmo e, portanto, é a operação ideal para, neste caso, o recurso listado abaixo.
   \begin{itemize}
-    \item \textbf{/company/{id}/today}
+    \item \textbf{/company/\{id\}/today}
 
     \par Este recurso tem como objetivo atualizar os preços atuais de uma dada empresa e, portanto é uma operação idempotente visto que, o resultado é sempre o mesmo não importando a quantidade de vezes que é executado.
   \end{itemize}
@@ -128,6 +126,15 @@ Para projetar o servidor de directório, ou seja, o servidor que contém todos o
 
 \section{Client}
 Para permitir o acesso às funcionalidades completas da Exchange e todos os recursos do eco-sistema associado, foi construído um Client que visa a utilização por utilizadores ditos normais.
+
+\par No que toca ao registo e login, este é efetuado no front-end server com recurso a \textit{Protocol Buffers} (account.proto), esta classe contém o username, a password e uma flag que indica se é referente a um registo ou um login. O menu referente ao utilizador não logado encontra-se abaixo.
+
+\begin{verbatim}
+[1] Login
+[2] Registo
+[0] Sair
+\end{verbatim}
+
 \par No cliente foram aplicadas todas as funcionalidades requiridas pelo docente no enunciado disponibilizado, as opções de um utilizador com o login efetuado são as seguintes:
 \begin{verbatim}
 [1] Ver empresas.
@@ -138,7 +145,11 @@ Para permitir o acesso às funcionalidades completas da Exchange e todos os recu
 [6] Cancelar real time updates.
 [7] Abrir posição.
 \end{verbatim}
-\par As operações descritas são operações que, além de requiridas no enunciado do trabalho prático, são necessárias para a correta funcionalidade de toda a aplicação. A opção \textbf{[1]}, contacta o serviço de directório (REST) de forma a obter a lista de todas as empresas que se encontram disponíveis para transacionar, 
+\par As operações descritas são operações que, além de requiridas no enunciado do trabalho prático, são necessárias para a correta funcionalidade de toda a aplicação. A opção \textbf{[1]}, contacta o serviço de directório (REST) de forma a obter a lista de todas as empresas que se encontram disponíveis para transacionar. Assim o utilizador tem acesso à lista de empresas que podem ser transacionadas e respetivos ids para efetuar os pedidos. De salientar que, os pedidos que acedem ao servidor REST mantêm uma cache para que sempre que é necessário obter, por exemplo, uma empresa, não exista a necessidade imediata de efetuar uma comunicação, existindo apenas a necessidade de aceder a cache local.
+\par Ao selecionar a opção \textbf{[2]}, é possível verificar todas as exchanges existentes, respetivas cidades e endereços. No caso da escolha \textbf{[3]}, é possível fornecer o id da empresa para obter mais informações mais específicas acerca desta. É possível, tal como requirido no enunciado, obter os preços do dia atual e anterior, de forma simples e segmentada com a selecção da opção \textbf{[4]}.
+\par A selecção \textbf{[5]} e \textbf{[6]}, são respetivamente a efetuar subscrições e anular estas. Estas opções utilizam a tecnologia de Message Oriented Middleware, o ZeroMQ, para subescrever aos diferentes servidores de exchange que contêm a empresa a subscrevem, desta forma obtendo as atualizações de transações em tempo real.
+\par Por fim, o último ponto abre posições, quer de compra, quer de venda nas diferentes Exchanges, este método utiliza \textit{Protocol Buffers} (orders.proto) para comunicar com o front-end server e com a exchange de forma a garantir que os seus pedidos são efetivamente processados. Para a correta execução deste pedido são utilizadas duas classes de \textit{Protocol Buffers}, uma para efetuar o pedido e uma para a resposta. Quando é efetuado o pedido, este é preenchido com a quantidade, preço pretendido, o utilizador que pertende efetuar a transação, a empresa à qual o pedido se refere e por fim o tipo de pedido (compra/venda).
+\par Quando existe efetivamente uma transação, além das notificações que são entregues pelo MOM, os intervinientes da compra/venda são também notificados da quantidade, preço e todas as informações intrínsecas à transação, portanto é também utilizado o mesmo \textit{Protocol Buffer} acima mencionado mas com objetivos e compreensões diferentes.
 
 \section{Conclusão}
 Com o término da fase final do projeto, é admissível afirmar que todos os objetivos requeridos pelo docente no enunciado cedido foram alcançados.
