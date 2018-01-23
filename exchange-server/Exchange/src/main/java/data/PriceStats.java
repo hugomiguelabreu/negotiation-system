@@ -16,6 +16,11 @@ public class PriceStats {
         this.rest = rest;
         this.company = company;
         min = max = open = close = 0;
+        PriceInfo pi = rest.getPrice(company, 0);
+        min = pi.getMin();
+        max = pi.getMax();
+        open = pi.getOpen();
+        close = pi.getClose();
     }
 
     public void checkValue(double value){
@@ -26,7 +31,7 @@ public class PriceStats {
 
         if (m || o || mx) {
             System.out.println("Value changes detected! Sending to REST Server.");
-            rest.setPrice(company, new PriceInfo(min, max, open, close));
+            rest.setPrice(company, new PriceInfo(max, min, open, close));
         }
     }
 
@@ -40,6 +45,9 @@ public class PriceStats {
 
     private boolean checkMin(double value) {
         if (this.min > value){
+            this.min = value;
+            return true;
+        }else if(this.min == 0){
             this.min = value;
             return true;
         }
