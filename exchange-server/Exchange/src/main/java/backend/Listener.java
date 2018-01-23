@@ -12,10 +12,14 @@ public class Listener {
 
     public static void main(String[] args) throws Exception {
 
-        if(args.length != 1)
-            System.out.println("\u001B[31m[ERROR] Market argument is missing or incorrect.\u001B[0m");
+        String type;
 
-        String type = "NASDAQ";
+        if(args.length != 1) {
+            System.out.println("\u001B[31m[ERROR] Market argument is missing or incorrect.\u001B[0m");
+            type = "NASDAQ";
+        }else{
+            type = args[0];
+        }
 
         // Inicia Thread que irá publicar exch  anges efetuadas
 

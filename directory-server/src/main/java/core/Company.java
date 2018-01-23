@@ -20,7 +20,7 @@ public class Company {
         this.name = name;
         this.exchange = exchange;
 
-        this.today = new PriceInfo(10, 0, 5, 0);
+        this.today = new PriceInfo(0, 0, 0, 0);
         this.yesterday = new PriceInfo(0, 0, 0, 0);
     }
 
