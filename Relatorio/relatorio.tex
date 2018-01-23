@@ -55,34 +55,71 @@
 
 
 \section{Introdução}
+O seguinte trabalho prático advém da necessidade de aplicação e consequente cimentação de conhecimentos adquiridos nas aulas relativas à unidade curricular de Paradigmas de Sistemas Distribuídos, visando temas como a correcta implementação de protocolos de comunicação inter-linguagens e compreenção das temáticas associadas. Assim sendo, o presente relatório reporta à fase final do projeto, estando, por conseguinte, visada a correta implementação de \textit{Protocol Buffers}, tanto em Java com em Erlang. Nesta fase final é também esperado que os conhecimentos acerca de atores, implementação de abordagens com recurso a Message Oriented Middleware e serviços REST sejam corretamente aplicados. 
+\par Estratégias para a manipulação das tecnologias contempladas pela Exchange terão de ser adotadas. No final deste projeto, espera-se que tenham sido corretamente aplicados conceitos com significativa complexidade no âmbito da disciplina, de um modo organizado e estruturado, a fim de lançar as fundações adequadas à execução deste último segmento da componente prática de avaliação da unidade curricular.
 
 \section{Front-end Server}
 
 \section{Exchange Server}
 
 \section{Directory Server}
-Para projetar o servidor de directório, ou seja, o servidor que contém todos os meta-dados relativos ao sistema de negociação, portanto, esta entidade do sistema mantém dados como, que empreas existem, em que exchange são transacionadas, que exchanges existem e que empresas têm e, os diferentes preços diários das empresas em questão.
+Para projetar o servidor de directório, ou seja, o servidor que contém todos os meta-dados relativos ao sistema de negociação, portanto, esta entidade do sistema mantém dados como, que empreas existem, em que exchange são transacionadas, que exchanges existem e que empresas têm e, os diferentes preços diários das empresas em questão. A utilização de um servidor REST para este tipo de acesso a dados, é o mais correto, visto que não existe a necessidade de manter estado entre pedidos e, desta forma, faz com que um só servidor consiga suportar muitos utilizadores em simultâneo.
 \par O servidor construído, tal como requirido pelo docente no enunciado, é um servidor REST, stateless, programado em Java com recuros a framework Dropwizard. Para ser possível garantir o acesso a todos os recursos que o serviço oferece, foi necessário definir \textit{end-points} para obter e/ou atualizar esses mesmos recursos. Os \textit{end-points} definidos para o servidor REST foram os seguintes:
 
 \begin{itemize}
 \item GET
   \begin{itemize}
-    \item /companies
+    \item \textbf{/companies}
     \par Este \textit{end-point} devolve uma lista com todas as empresas existentes no sistema. A lista devolvida é uma lista de objetos e, portanto, contém todos os atributos intrínsecos a cada empresa na enumeração.
-    \item /company/{id}
-    \item /company/{id}/today
-    \item /company/{id}/yesterday
-    \item /exchange/{id}
-    \item /exchange/{id}/companies
-    \item /exchanges
+    
+    \item \textbf{/company/{id}}
+    \par Este recurso, quando fornecido um correcto id de empresa, a respetiva empresa, caso esta se encontre efetivamente no sistema. Neste recuso é devolvida a empresa e todos os atributos a esta relacionados.
+    
+    \item \textbf{/company/{id}/today}
+    \par O \textit{end-point} descrito neste ponto, devolve a informação de preços do dia corrente, sendo que, esta informação também é devolvida no recurso anterior, desta forma, caso apenas seja necessário obter os preços, é possível reduzir a quantidade de informação que circula na rede.
+    
+    \item \textbf{/company/{id}/yesterday}
+    \par Da mesma forma que o recurso mencionado anteriormente retorna os preços do dia atual, este recurso retorna os preços do dia anterior.
+    
+    \item \textbf{/exchanges}
+    \par Este \textit{end-point} devolve uma lista com todas as exchanges existentes no sistema. A lista devolvida é, tal como nas empresas, uma lista de objetos e, portanto, contém todos os atributos intrínsecos a cada exchange na enumeração.
+
+    \item \textbf{/exchange/{id}}
+    \par Quando o recurso descrito é acedido, ao fornecer um id de exchange válido, este recurso devolve a dita exchange com todos os astributos a ela relacionados, como por exemplo, o IP+Porta.
+
+    \item \textbf{/exchange/{id}/companies}
+    \par Este \textit{end-point} devolve uma lista com todas as empresas da exchange que é fornecida como argumento (id). A lista devolvida é uma lista de objetos e, portanto, contém todos os atributos intrínsecos a cada empresa.
+    
+    
   \end{itemize}
 \item PUT
+  \par Os recursos definidos como PUT, deverão ser idempotentes, ou seja, por muitas vezes que o recurso seja executado, o resultado é o mesmo e, portanto, é a operação ideal para, neste caso, o recurso listado abaixo.
   \begin{itemize}
-    \item /company/{id}/today
+    \item \textbf{/company/{id}/today}
+
+    \par Este recurso tem como objetivo atualizar os preços atuais de uma dada empresa e, portanto é uma operação idempotente visto que, o resultado é sempre o mesmo descartando a quantidade de vezes que é executado. Este recurso também se encontra responsável por verificar a necessidade de trocar os valores, ou seja, verificar se já é um dia diferente e portanto tocar os valores para os dias corretos.
   \end{itemize}
 \end{itemize}
 
-\section{Client}
+\par Todos os recursos abordados acima foram corretamente implementados e a sua executção foi efetivamente testada, o grupo teve o cuidado de utilizar as primitivas da framework Jackson para permitir a correcta serialização dos dados.
 
+\section{Client}
+Para permitir o acesso às funcionalidades completas da Exchange e todos os recursos do eco-sistema associado, foi construído um Client que visa a utilização por utilizadores ditos normais.
+\par No cliente foram aplicadas todas as funcionalidades requiridas pelo docente no enunciado disponibilizado, as opções de um utilizador com o login efetuado são as seguintes:
+\begin{verbatim}
+[1] Ver empresas.
+[2] Ver exchanges.
+[3] Ver uma empresa específica.
+[4] Verificar preços da empresa.
+[5] Obter real time updates.
+[6] Cancelar real time updates.
+[7] Abrir posição.
+\end{verbatim}
+
+\section{Conclusão}
+Com o término da fase final do projeto, é admissível afirmar que todos os objetivos requeridos pelo docente no enunciado cedido foram alcançados.
+\par Conhecimentos relativos à implementação de Message Oriented Middleware, serviços REST, Protocol Buffers e atores em Erlang foram incrementados e por consequência cimentados. Em relação à linguagem Erlang, o grupo teve a necessidade de utilizar um gerenciador de pacotes semelhante ao Maven, o \textit{rebar3} que, permitiu aprofundar o conhecimento relativo à linguagem e respetiva utilização de diferentes pacotes desenvolvidos nesta.
+\par O maior foco incidiu sobre a correta implementação dos diferentes protocolos inter-linguagem e, em particular na implementação do front-end server que é parte fundamental na comunicação de sistemas.
+\par A qualidade do trabalho apresentado agrada ao grupo, tendo havido tempo suficiente para o estudo das soluções encontradas ao problema proposto, sem precipitações e com espaço de maneio suficiente para que todos os membros pudessem inteirar-se não somente do segmento que lhes foi atribuído, mas também das restantes duas terças-partes que não exigiram tanta da sua atenção.
 
 \end{document}
