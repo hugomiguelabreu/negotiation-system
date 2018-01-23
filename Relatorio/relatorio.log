@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.19)  23 JAN 2018 19:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.19)  23 JAN 2018 21:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -863,35 +863,24 @@ tim
 (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
 )
-<um_eeng.jpg, id=31, 148.3944pt x 73.9563pt>
+<um_eeng.jpg, id=47, 148.3944pt x 73.9563pt>
 File: um_eeng.jpg Graphic file (type jpg)
  <use um_eeng.jpg>
 Package pdftex.def Info: um_eeng.jpg used on input line 55.
 (pdftex.def)             Requested size: 37.0985pt x 18.48901pt.
 Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 55.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 55.
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./um_eeng.jpg>]
+Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 57.
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 61.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 63.
-
-(/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-32.def
-File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
-)
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 68.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 68.
- [1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./um_eeng.jpg>]
-<d1.png, id=43, 934.24031pt x 277.035pt>
-File: d1.png Graphic file (type png)
- <use d1.png>
-Package pdftex.def Info: d1.png used on input line 77.
-(pdftex.def)             Requested size: 426.79135pt x 126.55838pt.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 85.
+(babel)             in language  on input line 65.
 
 
 Package Fancyhdr Warning: \headheight is too small (13.6pt): 
@@ -900,17 +889,76 @@ Package Fancyhdr Warning: \headheight is too small (13.6pt):
  This may cause the page layout to be inconsistent, however.
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 87.
+(babel)             in language  on input line 84.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 87.
-[2pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
+(babel)             in language  on input line 84.
+[2]
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 101.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 108.
+
+
+Package Fancyhdr Warning: \headheight is too small (13.6pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 110.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 110.
+[3]
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 112.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 116.
+ (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-32.def
+File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
+)
+<d1.png, id=69, 934.24031pt x 277.035pt>
+File: d1.png Graphic file (type png)
+ <use d1.png>
+Package pdftex.def Info: d1.png used on input line 130.
+(pdftex.def)             Requested size: 426.79135pt x 126.55838pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Package Fancyhdr Warning: \headheight is too small (13.6pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 135.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 135.
+[4]
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 138.
+
+
+Package Fancyhdr Warning: \headheight is too small (13.6pt): 
+ Make it at least 14.49998pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 150.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 150.
+[5pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
 has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.87 \par
-          O servidor construído, tal como requirido pelo docente no enuncia...
- <./d1.png>]
+l.150 
+       <./d1.png>]
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 180.
+
 
 Package Fancyhdr Warning: \headheight is too small (13.6pt): 
  Make it at least 14.49998pt.
@@ -918,13 +966,11 @@ Package Fancyhdr Warning: \headheight is too small (13.6pt):
  This may cause the page layout to be inconsistent, however.
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 118.
+(babel)             in language  on input line 183.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 118.
-[3]
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 127.
-LaTeX Font Info:    Try loading font information for T1+zi4 on input line 132.
+(babel)             in language  on input line 183.
+[6]
+LaTeX Font Info:    Try loading font information for T1+zi4 on input line 185.
  (/usr/share/texlive/texmf-dist/tex/latex/inconsolata/t1zi4.fd
 File: t1zi4.fd 2014/06/22 T1/zi4 (Inconsolata)
 )
@@ -935,12 +981,12 @@ Package Fancyhdr Warning: \headheight is too small (13.6pt):
  This may cause the page layout to be inconsistent, however.
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 149.
+(babel)             in language  on input line 206.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 149.
-[4]
+(babel)             in language  on input line 206.
+[7]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 154.
+(babel)             in language  on input line 207.
 
 
 Package Fancyhdr Warning: \headheight is too small (13.6pt): 
@@ -949,27 +995,27 @@ Package Fancyhdr Warning: \headheight is too small (13.6pt):
  This may cause the page layout to be inconsistent, however.
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 160.
+(babel)             in language  on input line 213.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 160.
-[5]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 160.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 160.
+(babel)             in language  on input line 213.
+[8]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 213.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 213.
  (./relatorio.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 160.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 160.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 213.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 213.
 Package rerunfilecheck Info: File `relatorio.out' has not changed.
-(rerunfilecheck)             Checksum: 694D66FF0D10468B9366374E05570655;291.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 160.
+(rerunfilecheck)             Checksum: A6C0B4BDA0422A75B37B95086278FE4D;525.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 213.
  ) 
 Here is how much of TeX's memory you used:
- 20139 strings out of 493029
- 358881 string characters out of 6136233
+ 20150 strings out of 493029
+ 359019 string characters out of 6136233
  455861 words of memory out of 5000000
- 23294 multiletter control sequences out of 15000+600000
+ 23298 multiletter control sequences out of 15000+600000
  12022 words of font info for 30 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,12n,72p,763b,590s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,12n,72p,782b,590s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}{/usr/
 share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf/fonts/en
 c/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/pu
@@ -979,10 +1025,10 @@ usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/font
 s/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-su
 per/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm2074.pfb></u
 sr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb>
-Output written on relatorio.pdf (5 pages, 193098 bytes).
+Output written on relatorio.pdf (8 pages, 203413 bytes).
 PDF statistics:
- 102 PDF objects out of 1000 (max. 8388607)
- 83 compressed objects within 1 object stream
- 13 named destinations out of 1000 (max. 500000)
- 71 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 134 PDF objects out of 1000 (max. 8388607)
+ 111 compressed objects within 2 object streams
+ 20 named destinations out of 1000 (max. 500000)
+ 103 words of extra memory for PDF output out of 10000 (max. 10000000)
 

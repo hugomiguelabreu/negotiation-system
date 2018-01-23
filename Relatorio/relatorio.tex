@@ -52,13 +52,66 @@
 \begin{document}
 
 \maketitle
-
+\break
 
 \section{Introdução}
 O seguinte trabalho prático advém da necessidade de aplicação e consequente cimentação de conhecimentos adquiridos nas aulas relativas à unidade curricular de Paradigmas de Sistemas Distribuídos, visando temas como a correcta implementação de protocolos de comunicação inter-linguagens e compreenção das temáticas associadas. Assim sendo, o presente relatório reporta à fase final do projeto, estando, por conseguinte, visada a correta implementação de \textit{Protocol Buffers}, tanto em Java com em Erlang. Nesta fase final é também esperado que os conhecimentos acerca de atores, implementação de abordagens com recurso a Message Oriented Middleware e serviços REST sejam corretamente aplicados. 
 \par Estratégias para a manipulação das tecnologias contempladas pela Exchange terão de ser adotadas. No final deste projeto, espera-se que tenham sido corretamente aplicados conceitos com significativa complexidade no âmbito da disciplina, de um modo organizado e estruturado, a fim de lançar as fundações adequadas à execução deste último segmento da componente prática de avaliação da unidade curricular.
 
 \section{Front-end Server}
+O front-end-server implementa autenticação de clientes e atua como intermediário entre clientes e servidor exchange, assegurando o correto redirecionamento de pedidos entre clientes e servidor. 
+\par Foi também criado um módulo frontServer\_app tem como único propósito iniciar os diferentes módulos do front-server-app, sendo assim mais fácil executar o sistema.
+
+\subsection{Mnesia}
+Devido às propriedades do funcionamento front-end-server, foi decidido implementar uma camada de dados suportada na biblioteca Mnesia, nativa da linguagem erlang. As principais razões que impulsionaram a sua implementação foram:
+\begin{itemize}
+\item Atomicidade, que, uma vez garantida, permite que várias operações sejam executadas como uma só, por exemplo, no caso de registo de um utilizador é necessário verificar se o nome do usuário já está registado e, só depois, a entrada é adicionada na base de dados. Dada a natureza concorrente do front-end-server, esta garantia torna-se uma grande mais-valia.
+\item Modularidade, pois foi possível isolar a camada de dados num diferente módulo, aumentando assim a legibilidade do código fonte do sistema.
+\end{itemize}
+\par Foram criadas 4 tabelas na base de dados:
+
+\begin{itemize}
+\item users, com 2 colunas:
+  \begin{itemize}
+    \item username, que representa o nome de um utilizador autenticado
+    \item password, que representa a password de um utilizador autenticado
+  \end{itemize}
+
+\item cache, com 2 colunas:
+  \begin{itemize}
+    \item Id, que representa o identificador de uma empresa cotada numa exchange
+    \item address, que representa o endereço de uma empresa cotada numa exchange
+  \end{itemize}
+
+\item positions, com 2 colunas:
+  \begin{itemize}
+    \item username, que representa o nome de um utilizador autenticado
+    \item socket, que representa o socket usado na comunicação entre esse mesmo cliente e o front-end-server
+  \end{itemize}
+
+\item mailbox, com 2 colunas:
+  \begin{itemize}
+    \item username, que representa o nome de um utilizador autenticado
+    \item msg, que representa a lista de mensagens em espera para serem entreges ao utilizador destinatário
+  \end{itemize}
+\end{itemize}
+
+\par A utilidade de todas estas tabelas será demonstrada posteriormente 
+
+\subsection{Autenticação}
+Para efetuar autenticação de clientes, o front-end-server escuta na porta 2000 por pedidos. Quando um cliente deseja autenticar-se no sistema, conecta-se na porta 2000 e envia um pedido serializado em Protocol Buffers. O pedido transporta o username, a password e o tipo de pedido (registo ou login).
+\par Ao receber um pedido de autenticação, o front-end-server procede à sua descodificação recorrendo à biblioteca gpb. Os campos são, então, extraídos e analisados. Se se tratar de um registo, é consultada a tabela da base de dados que contém todos os utilizadores do sistema e é testada a singularidade do nome do usuário, ou seja, se existe algum cliente já registado com o mesmo username. Caso exista, é construída uma resposta serializada com um único campo booleano de valor false. Caso contrário, é adicionada uma nova entrada na base de dados e é enviada uma resposta idêntica, diferindo apenas no valor do campo que passa para true. 
+\par Se se tratar de um login, o comportamento é semelhante, divergindo apenas na verificação dos campos na base de dados, onde, neste caso, se pretende verificar que, à password indicada, corresponde o username dado. 
+
+\par Cada utilizador autenticado no sistema tem a si associada uma caixa de mensagens, representada por uma tabela na base de dados, que armazena transações que ocorreram durante períodos em que o utilizador não estava logado. Sempre que um utilizador se autentica no front-end-server, o conteúdo da sua caixa de mensagens é acedido, sendo quaisquer mensagens aí contidas removidas e  redirecionadas para o cliente correspondente.
+
+\subsection{GetJson}
+O módulo getJson tem como objetivo obter o endereço de empresas, através de pedidos REST ao directory-server. Adicionalmente, os resultados dos pedidos REST são guardados na tabela cache na base de dados, com o propósito de reduzir o congestionamento do directory-server. Desta forma, sempre que se pretende obter o endereço da exchange que aloja uma determinada empresa, é consultada em primeiro lugar a tabela cache. Se desta constar o endereço desejado, então é evitado o pedido ao directory-server. Caso contrário, o pedido REST é efetuado e o resultado guardado na tabela cache.
+\par Para efetuar o processamento do Json resultante dos pedidos REST ao directory-server, foram utilizadas 2 bibliotecas externas: \textit{jiffy} e \textit{ej} 
+
+\subsection{Orders}
+O módulo Orders assegura a comunicação entre exchange-server e clientes, redirecionando pedidos de clientes para o servidor e vice-versa. 
+\par Quando um cliente deseja registar uma posição, envia o pedido serializado em Protocol Buffers para o front-end-server, que estará à escuta na porta 3000. O pedido é, então, desserializado e encaminhado para o exchange-server correspondente. Uma confirmação é enviada ao cliente, depois do socket usado ser guardado para a resposta que virá no futuro. Da mesma maneira, quando um exchange-server efetua uma transação com sucesso, comunica com o front-end-server, através da porta 3001. Este obtém os sockets dos 2 clientes nela envolvidos e envia o resultado dessa mesma transação para os sockets. Se algum dos clientes não estiver logado, então a mensagem é colocada na tabela mailbox, para ser posteriormente entregue.
 
 \section{Exchange Server}
 
