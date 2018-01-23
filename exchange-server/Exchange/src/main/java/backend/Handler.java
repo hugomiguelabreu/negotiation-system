@@ -26,7 +26,7 @@ public class Handler extends Thread{
             System.out.println("\n\u001B[32m" + "[+] New connection!\u001B[0m");
 
             LocalTime open = LocalTime.parse("09:00:00");
-            LocalTime close = LocalTime.parse("23:00:00");
+            LocalTime close = LocalTime.parse("17:00:00");
 
             Order o = Order.parseDelimitedFrom(socket.getInputStream());
             System.out.print("Received probuf message: \n" + "\u001B[34m" + o + "\u001B[0m");
