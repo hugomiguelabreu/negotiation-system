@@ -20,8 +20,7 @@ public class Company {
         this.name = name;
         this.exchange = exchange;
 
-
-        this.today = new PriceInfo(0, 0, 0, 0);
+        this.today = new PriceInfo(10, 0, 5, 0);
         this.yesterday = new PriceInfo(0, 0, 0, 0);
     }
 
@@ -41,49 +40,21 @@ public class Company {
     }
 
     public void updatePrice(PriceInfo price){
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
         synchronized (this) {
-            //Check if we need to change today to yesterday.
-            if (Timestamp.valueOf(this.today.getTimestamp()).toLocalDateTime().getDayOfMonth() < cal.get(Calendar.DAY_OF_MONTH)) {
-                this.yesterday = this.today;
-                this.today = price;
-            } else {
-                this.today = price;
-            }
+            this.today = price;
         }
     }
 
     @JsonProperty
-    public PriceInfo getToday(){
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
-
-        //Check if we need to change today to yesterday.
-        if(Timestamp.valueOf(this.today.getTimestamp()).toLocalDateTime().getDayOfMonth() < cal.get(Calendar.DAY_OF_MONTH)){
-            this.yesterday = this.today;
-            this.today = new PriceInfo(0, 0, 0, 0);
-        }
-
-        return this.today;
-    }
+    public PriceInfo getToday(){ return this.today; }
 
     @JsonProperty
-    public PriceInfo getYesterday() {
+    public PriceInfo getYesterday() { return this.yesterday; }
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
-
-        if(Timestamp.valueOf(this.today.getTimestamp()).toLocalDateTime().getDayOfMonth() < cal.get(Calendar.DAY_OF_MONTH)) {
+    public void changeDay(){
+        synchronized (this){
             this.yesterday = this.today;
             this.today = new PriceInfo(0, 0, 0, 0);
         }
-
-        return this.yesterday;
-
     }
-
-
 }
