@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package update;
+
+option java_package = "data";
+
+message Update {
+	string user = 1;
+}

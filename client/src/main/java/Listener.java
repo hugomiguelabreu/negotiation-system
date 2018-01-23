@@ -12,12 +12,18 @@ public class Listener implements Runnable{
 
     @Override
     public void run() {
+
         while(true){
             try {
 
                 Order o = Order.parseDelimitedFrom(socket.getInputStream());
-                if (o.getConfirmation())
+
+                if (o.getConfirmation()){
+
                     System.out.println("Order for " + o.getSymbol() + " registered successfully.");
+
+                }
+
                 else
                     System.out.println("Transition made:\n"+ o);
 
