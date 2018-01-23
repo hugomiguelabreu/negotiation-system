@@ -3,7 +3,7 @@
 
 package data;
 
-public final class  OrderOuterClass {
+public final class OrderOuterClass {
   private OrderOuterClass() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
